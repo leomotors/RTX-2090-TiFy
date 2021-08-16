@@ -4,8 +4,12 @@ project(RTX-2090-TiFy)
 find_package(OpenCV REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
 
+find_package(wxWidgets REQUIRED COMPONENTS net core base)
+include(${wxWidgets_USE_FILE})
+
 add_executable(main src/main.cpp)
 target_link_libraries(main ${OpenCV_LIBS})
+target_link_libraries(main ${wxWidgets_LIBRARIES})
 
 set_property(TARGET main PROPERTY CXX_STANDARD 17)
 
