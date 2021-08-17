@@ -10,6 +10,7 @@ public:
 private:
     void OnExit(wxCommandEvent &event);
     void OnAbout(wxCommandEvent &event);
-
+    void OnOpenFile(wxCommandEvent &event);
+    
     wxDECLARE_EVENT_TABLE();
 };
