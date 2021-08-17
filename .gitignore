@@ -38,3 +38,7 @@ build
 # Executable
 
 main
+
+# VSCode
+
+.vscode
