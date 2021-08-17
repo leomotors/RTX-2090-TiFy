@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(RTX-2090-TiFy)
+project(RTX-2090-TiFy VERSION 1.0.0)
 
 find_package(OpenCV REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
@@ -7,11 +7,17 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 find_package(wxWidgets REQUIRED COMPONENTS net core base)
 include(${wxWidgets_USE_FILE})
 
-add_executable(main src/main.cpp)
-target_link_libraries(main ${OpenCV_LIBS})
-target_link_libraries(main ${wxWidgets_LIBRARIES})
+include_directories(inc)
+
+add_executable(main 
+    src/main.cpp
+    src/MyFrame.cpp
+)
 
 set_property(TARGET main PROPERTY CXX_STANDARD 17)
+
+target_link_libraries(main ${OpenCV_LIBS})
+target_link_libraries(main ${wxWidgets_LIBRARIES})
 
 if(MSVC)
     add_compile_options(/Wall)
