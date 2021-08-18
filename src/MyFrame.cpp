@@ -4,9 +4,10 @@
 #include <wx/wx.h>
 
 #include "Events.hpp"
+#include "ImageHandler.hpp"
 
 MyFrame::MyFrame(const wxString &title, const wxPoint &pos, const wxSize &size)
-    : wxFrame(nullptr, wxID_ANY, title, pos, size), ConfigList(Configurations(this))
+    : wxFrame(nullptr, wxID_ANY, title, pos, size), ConfigList(Configurations(this, this->Image))
 {
     wxMenu *menuHelp = new wxMenu;
     menuHelp->Append(wxID_ABOUT);
@@ -52,7 +53,19 @@ void MyFrame::OnAbout(wxCommandEvent &event)
 
 void MyFrame::OnOpenFile(wxCommandEvent &event)
 {
-    // ! Temp
-    std::cout << "Why u click meh\n";
-    ConfigList.getListView()->InsertItem(4, "KUAY");
+    wxFileDialog openFileDialog(this, "Open JPG/PNG file", ".", "", "Image Files (*.jpg)|*.jpg",
+                                wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+
+    if (openFileDialog.ShowModal() == wxID_CANCEL)
+    {
+        std::cout << "Opening File: Cancelled\n";
+        return;
+    }
+
+    std::string tmpFilePath = openFileDialog.GetPath().mb_str(wxConvUTF8).data();
+    std::cout << "Opening File at " << tmpFilePath << "\n";
+
+    Image.loadFile(tmpFilePath);
+
+    ConfigList.updateList();
 }

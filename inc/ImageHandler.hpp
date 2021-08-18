@@ -7,10 +7,14 @@
 class ImageHandler
 {
   private:
+    std::string ImagePath;
     cv::Mat Image;
     std::pair<int, int> ImgRes;
 
   public:
-    ImageHandler(std::string &filename);
+    ImageHandler();
+    bool loadFile(std::string &filename);
     std::pair<int, int> getImageRes();
+    std::string getImageResStr();
+    std::string getImagePath();
 };

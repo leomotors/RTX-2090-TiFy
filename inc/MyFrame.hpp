@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Configurations.hpp"
+#include "ImageHandler.hpp"
 
 #include <wx/listctrl.h>
 #include <wx/wx.h>
@@ -9,6 +10,7 @@ class MyFrame : public wxFrame
 {
   private:
     Configurations ConfigList;
+    ImageHandler Image;
 
   public:
     MyFrame(const wxString &title, const wxPoint &pos, const wxSize &size);
