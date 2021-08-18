@@ -1,6 +1,6 @@
 #pragma once
 
-enum Events_ID
+enum EventsID
 {
     OPEN_FILE_BUTTON = 69
 };

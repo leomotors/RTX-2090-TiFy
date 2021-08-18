@@ -4,13 +4,14 @@
 
 class MyFrame : public wxFrame
 {
-public:
+  public:
     MyFrame(const wxString &title, const wxPoint &pos, const wxSize &size);
 
-private:
+  private:
     void OnExit(wxCommandEvent &event);
     void OnAbout(wxCommandEvent &event);
+
     void OnOpenFile(wxCommandEvent &event);
-    
+
     wxDECLARE_EVENT_TABLE();
 };
