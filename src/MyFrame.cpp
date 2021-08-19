@@ -37,9 +37,10 @@ MyFrame::MyFrame(const wxString &title, const wxPoint &pos, const wxSize &size)
 
     // * Sub-Row: Action Buttons
     wxBoxSizer *buttonBar = new wxBoxSizer(wxHORIZONTAL);
-    buttonBar->Add(new wxButton(this, ADVANCED_BUTTON, "Advanced"), 0, wxSTRETCH_NOT | wxALIGN_LEFT,
-                   30);
-    buttonBar->Add(new wxButton(this, wxID_ANY, "Generate!"), 0, wxSTRETCH_NOT | wxALIGN_RIGHT, 30);
+    buttonBar->Add(new wxButton(this, WARPSET_BUTTON, "Set Warp Points (Advanced)"), 0,
+                   wxSTRETCH_NOT | wxALIGN_LEFT, 30);
+    buttonBar->Add(new wxButton(this, GENERATE_BUTTON, "Generate!"), 0,
+                   wxSTRETCH_NOT | wxALIGN_RIGHT, 30);
 
     mainColumn->Add(buttonBar, 0, wxEXPAND | wxALL, 5);
 
@@ -102,20 +103,19 @@ void MyFrame::OnSaveFile(wxCommandEvent &event)
 
 void MyFrame::OnAdvanced(wxCommandEvent &event)
 {
-    const char *tmpMsg{"These are the warp positions\nIf set empty, will be generated again"};
-    wxTextEntryDialog AdvancedDialog(this, tmpMsg, "Advanced Settings",
-                                     ConfigList.getPositionsAsString(), wxTextEntryDialogStyle,
-                                     wxDefaultPosition);
+    const char *tmpMsg{"These are the warp positions that will style your video.\nIf one is set "
+                       "empty, it will be randomly generated again."};
+    wxTextEntryDialog WarpSetDialog(this, tmpMsg, "Warp Points Settings",
+                                    ConfigList.getPositionsAsString(), wxTextEntryDialogStyle,
+                                    wxDefaultPosition);
 
-    if (AdvancedDialog.ShowModal() == wxID_OK)
-    {
-        if (ConfigList.validate(AdvancedDialog.GetValue().ToStdString()))
-        {
-            return;
-        }
-        else
-        {
-            return;
-        }
-    }
+    if (WarpSetDialog.ShowModal() == wxID_OK)
+        ConfigList.validate(WarpSetDialog.GetValue().ToStdString());
+    else
+        std::cout << "Warp Points Settings Cancelled by User\n";
+}
+
+void MyFrame::OnGenerate(wxCommandEvent &event)
+{
+    return;
 }

@@ -80,7 +80,7 @@ bool Configurations::validate(std::string ToValidate)
 
     if (word_arr.size() > nLoops)
     {
-        std::cout << "Advanced Dialog Validation Failed: Too Many Points\n";
+        std::cout << "Warp Points Settings Validation Failed: Too Many Points\n";
         return false;
     }
 
@@ -92,14 +92,14 @@ bool Configurations::validate(std::string ToValidate)
 
         if (x < 0 || x >= Resolution.first)
         {
-            std::cout << "Advanced Dialog Validation Failed: X (" + std::to_string(x) +
+            std::cout << "Warp Points Settings Validation Failed: X (" + std::to_string(x) +
                              ") not in Range\n";
             return false;
         }
 
         if (y < 0 || y >= Resolution.second)
         {
-            std::cout << "Advanced Dialog Validation Failed: Y (" + std::to_string(y) +
+            std::cout << "Warp Points Settings Validation Failed: Y (" + std::to_string(y) +
                              ") not in Range\n";
             return false;
         }
@@ -107,7 +107,7 @@ bool Configurations::validate(std::string ToValidate)
         newWarp.push_back({x, y});
     }
 
-    std::cout << "Advanced Dialog Validation Success\n";
+    std::cout << "Warp Points Settings Validation Success and Set\n";
     setWarpPosition(newWarp);
     return true;
 }

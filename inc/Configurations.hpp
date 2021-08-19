@@ -7,6 +7,7 @@
 #include <wx/wx.h>
 
 #include "ImageHandler.hpp"
+#include "RTX2090Ti.hpp"
 
 #define DEFAULT_OUTVID_RESOLUTION_X 480
 #define DEFAULT_OUTVID_RESOLUTION_Y 480
@@ -16,6 +17,8 @@
 
 class Configurations
 {
+    friend class RTX2090Ti;
+
   private:
     std::pair<int, int> Resolution{DEFAULT_OUTVID_RESOLUTION_X, DEFAULT_OUTVID_RESOLUTION_Y};
     int FPS{DEFAULT_FPS};
@@ -39,5 +42,5 @@ class Configurations
     bool validate(std::string ToValidate);
 
   private:
-    void setWarpPosition(std::vector<std::pair<int,int>> &newWarp);
+    void setWarpPosition(std::vector<std::pair<int, int>> &newWarp);
 };
