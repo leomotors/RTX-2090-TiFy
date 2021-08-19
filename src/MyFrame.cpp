@@ -24,12 +24,9 @@ MyFrame::MyFrame(const wxString &title, const wxPoint &pos, const wxSize &size)
 
     // * Sub-Row: File Input Row
     wxBoxSizer *FileInputRow = new wxBoxSizer(wxHORIZONTAL);
-    // wxStaticText *FileInputMsg =
-    //    new wxStaticText(this, wxID_ANY, "Click here to select Input File -> ");
     wxButton *OpenFileButton = new wxButton(this, OPEN_FILE_BUTTON, "Browse Input File");
     wxButton *SaveFileButton = new wxButton(this, SAVE_FILE_BUTTON, "Select Output File Location");
 
-    // FileInputRow->Add(FileInputMsg, 0, wxCENTER | wxRIGHT);
     FileInputRow->Add(OpenFileButton, 0, wxCENTER | wxRIGHT);
     FileInputRow->Add(SaveFileButton, 0, wxCENTER | wxLEFT);
 
@@ -40,7 +37,8 @@ MyFrame::MyFrame(const wxString &title, const wxPoint &pos, const wxSize &size)
 
     // * Sub-Row: Action Buttons
     wxBoxSizer *buttonBar = new wxBoxSizer(wxHORIZONTAL);
-    buttonBar->Add(new wxButton(this, wxID_ANY, "Advanced"), 0, wxSTRETCH_NOT | wxALIGN_LEFT, 30);
+    buttonBar->Add(new wxButton(this, ADVANCED_BUTTON, "Advanced"), 0, wxSTRETCH_NOT | wxALIGN_LEFT,
+                   30);
     buttonBar->Add(new wxButton(this, wxID_ANY, "Generate!"), 0, wxSTRETCH_NOT | wxALIGN_RIGHT, 30);
 
     mainColumn->Add(buttonBar, 0, wxEXPAND | wxALL, 5);
@@ -100,4 +98,22 @@ void MyFrame::OnSaveFile(wxCommandEvent &event)
     std::cout << "Configged Output Path: " << tmpFilePath << "\n";
 
     ConfigList.setOutputPath(tmpFilePath);
+}
+
+void MyFrame::OnAdvanced(wxCommandEvent &event)
+{
+    const char *tmpMsg{"These are the warp positions\nIf set empty, will be generated again."};
+    wxTextEntryDialog AdvancedDialog(this, tmpMsg, "Advanced Settings",
+                                     ConfigList.getPositionsAsString(), wxTextEntryDialogStyle,
+                                     wxDefaultPosition);
+
+    if (AdvancedDialog.ShowModal() == wxID_OK)
+    {
+        if (ConfigList.validate(AdvancedDialog.GetValue().ToStdString()) == wxID_OK)
+            return;
+        else
+        {
+            std::cout << "Advanced Dialog: Validation Failed\n";
+        }
+    }
 }

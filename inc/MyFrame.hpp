@@ -24,6 +24,7 @@ class MyFrame : public wxFrame
 
     void OnOpenFile(wxCommandEvent &event);
     void OnSaveFile(wxCommandEvent &event);
+    void OnAdvanced(wxCommandEvent &event);
 
     wxDECLARE_EVENT_TABLE();
 };

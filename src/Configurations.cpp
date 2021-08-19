@@ -1,10 +1,14 @@
 #include "Configurations.hpp"
 
+#include <cstdlib>
+#include <sstream>
+#include <string>
+#include <vector>
 #include <wx/listctrl.h>
 #include <wx/wx.h>
 
 Configurations::Configurations(wxWindow *parent, ImageHandler &ImageHandlerRef)
-    : ImageHandlerRef(ImageHandlerRef)
+    : parent(parent), ImageHandlerRef(ImageHandlerRef)
 {
     ListView = new wxListView(parent, wxID_ANY, wxDefaultPosition, wxSize(780, 300));
 
@@ -18,6 +22,12 @@ Configurations::Configurations(wxWindow *parent, ImageHandler &ImageHandlerRef)
     ListView->InsertItem(5, "Output Video FPS");
     ListView->InsertItem(6, "Output Video Length Per Loop");
     ListView->InsertItem(7, "Number of Loops");
+
+    for (int i = 0; i < DEFAULT_LOOPS_COUNT; i++)
+    {
+        WarpPosition.push_back(
+            {std::rand() % DEFAULT_OUTVID_RESOLUTION_X, std::rand() % DEFAULT_OUTVID_RESOLUTION_Y});
+    }
 }
 
 wxListView *Configurations::getListView()
@@ -44,4 +54,31 @@ void Configurations::setOutputPath(std::string &outputPath)
         outputPath += ".mp4";
 
     ListView->SetItem(3, 1, outputPath);
+}
+
+std::string Configurations::getPositionsAsString()
+{
+    std::string result_str;
+    for (std::pair<int, int> pos : WarpPosition)
+    {
+        result_str += std::to_string(pos.first) + "x" + std::to_string(pos.second) + " ";
+    }
+    return result_str;
+}
+
+bool Configurations::validate(std::string ToValidate)
+{
+    std::stringstream ss(ToValidate);
+
+    std::vector<std::string> word_arr;
+    std::string tmp;
+    while (ss >> tmp)
+    {
+        word_arr.push_back(tmp);
+    }
+
+    if (tmp.size() > nLoops)
+        return false;
+
+    return true;
 }
