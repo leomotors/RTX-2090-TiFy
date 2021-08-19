@@ -26,6 +26,7 @@ class Configurations
   public:
     Configurations(wxWindow *parent, ImageHandler &ImageHandlerRef);
     wxListView *getListView();
+    // * Update List with Current Data
     void updateList();
     void setOutputPath(std::string &outputPath);
 };

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(RTX-2090-TiFy VERSION 1.0.0.8)
+project(RTX-2090-TiFy VERSION 1.0.0.10)
 set(APP_VERSION "${CMAKE_PROJECT_VERSION}")
 configure_file(config/AppProps.h.in ${CMAKE_CURRENT_BINARY_DIR}/gen/AppProps.h)
 
@@ -31,7 +31,7 @@ set_property(TARGET main PROPERTY CXX_STANDARD 20)
 if(MSVC)
     add_compile_options(/Wall)
 else()
-    add_compile_options(-Wall -Wextra -O2)
+    add_compile_options(-Wall -Wextra -Wundef -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -Wcast-qual -Wunreachable-code -O2)
 endif()
 
 # Moving Executable to Project Root (! Maybe changed)
