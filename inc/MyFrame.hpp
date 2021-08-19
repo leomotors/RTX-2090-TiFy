@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Configurations.hpp"
-#include "ImageHandler.hpp"
-
 #include <string>
 #include <wx/listctrl.h>
 #include <wx/wx.h>
+
+#include "Configurations.hpp"
+#include "ImageHandler.hpp"
 
 class MyFrame : public wxFrame
 {

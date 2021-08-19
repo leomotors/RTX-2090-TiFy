@@ -7,7 +7,6 @@
 #include <wx/wx.h>
 
 #include "ImageHandler.hpp"
-#include "RTX2090Ti.hpp"
 
 #define DEFAULT_OUTVID_RESOLUTION_X 480
 #define DEFAULT_OUTVID_RESOLUTION_Y 480

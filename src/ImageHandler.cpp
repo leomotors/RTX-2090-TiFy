@@ -29,3 +29,8 @@ std::string ImageHandler::getImagePath()
 {
     return ImagePath;
 }
+
+cv::Mat ImageHandler::getImage()
+{
+    return Image;
+}

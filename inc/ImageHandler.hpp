@@ -17,4 +17,5 @@ class ImageHandler
     std::pair<int, int> getImageRes();
     std::string getImageResStr();
     std::string getImagePath();
+    cv::Mat getImage();
 };
