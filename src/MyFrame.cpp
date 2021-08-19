@@ -1,11 +1,13 @@
 #include "MyFrame.hpp"
 
+#include <opencv2/opencv.hpp>
 #include <wx/listctrl.h>
 #include <wx/wx.h>
 
 #include "AppProps.h"
 #include "Events.hpp"
 #include "ImageHandler.hpp"
+#include "RTX2090Ti.hpp"
 
 MyFrame::MyFrame(const wxString &title, const wxPoint &pos, const wxSize &size)
     : wxFrame(nullptr, wxID_ANY, title, pos, size), ConfigList(Configurations(this, Image))
@@ -117,5 +119,16 @@ void MyFrame::OnAdvanced(wxCommandEvent &event)
 
 void MyFrame::OnGenerate(wxCommandEvent &event)
 {
+    if (ConfigList.isRTXReady())
+    {
+        RTX2090Ti RTX(this, Image.getImage(), ConfigList);
+        RTX.buildVideo();
+    }
+    else
+    {
+        wxMessageBox("Your Settings is not valid, please try again.",
+                     "Build Aborted: Not RTX Ready", wxOK | wxICON_ERROR);
+    }
+
     return;
 }

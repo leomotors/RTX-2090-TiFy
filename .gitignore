@@ -42,3 +42,8 @@ main
 # VSCode
 
 .vscode
+
+# Exports
+*.avi
+*.mp3
+*.mp4

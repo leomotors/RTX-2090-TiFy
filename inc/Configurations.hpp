@@ -24,6 +24,7 @@ class Configurations
     double LoopDuration{DEFAULT_LOOP_DURATION};
     int nLoops{DEFAULT_LOOPS_COUNT};
     std::vector<std::pair<int, int>> WarpPosition;
+    std::string OutVideoPath;
 
     wxWindow *parent;
     wxListView *ListView;
@@ -39,6 +40,7 @@ class Configurations
     std::string getPositionsAsString();
     // * Validate and If Pass, Sending data to Configurations
     bool validate(std::string ToValidate);
+    bool isRTXReady();
 
   private:
     void setWarpPosition(std::vector<std::pair<int, int>> &newWarp);

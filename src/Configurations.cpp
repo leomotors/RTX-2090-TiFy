@@ -54,7 +54,9 @@ void Configurations::setOutputPath(std::string &outputPath)
     if (!outputPath.ends_with(".mp4"))
         outputPath += ".mp4";
 
-    ListView->SetItem(3, 1, outputPath);
+    OutVideoPath = outputPath.substr(0, outputPath.size() - 4);
+
+    ListView->SetItem(3, 1, OutVideoPath + ".mp4");
 }
 
 std::string Configurations::getPositionsAsString()
@@ -109,6 +111,17 @@ bool Configurations::validate(std::string ToValidate)
 
     std::cout << "Warp Points Settings Validation Success and Set\n";
     setWarpPosition(newWarp);
+    return true;
+}
+
+bool Configurations::isRTXReady()
+{
+    if (OutVideoPath.empty())
+    {
+        std::cout << "Not RTX Ready: No Output File\n";
+        return false;
+    }
+
     return true;
 }
 
