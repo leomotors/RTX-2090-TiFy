@@ -1,5 +1,6 @@
 #include "Configurations.hpp"
 
+#include <cstdio>
 #include <cstdlib>
 #include <sstream>
 #include <string>
@@ -77,8 +78,45 @@ bool Configurations::validate(std::string ToValidate)
         word_arr.push_back(tmp);
     }
 
-    if (tmp.size() > nLoops)
+    if (word_arr.size() > nLoops)
+    {
+        std::cout << "Advanced Dialog Validation Failed: Too Many Points\n";
         return false;
+    }
 
+    std::vector<std::pair<int, int>> newWarp;
+    for (std::string word : word_arr)
+    {
+        int x, y;
+        std::sscanf(word.c_str(), "%dx%d", &x, &y);
+
+        if (x < 0 || x >= Resolution.first)
+        {
+            std::cout << "Advanced Dialog Validation Failed: X (" + std::to_string(x) +
+                             ") not in Range\n";
+            return false;
+        }
+
+        if (y < 0 || y >= Resolution.second)
+        {
+            std::cout << "Advanced Dialog Validation Failed: Y (" + std::to_string(y) +
+                             ") not in Range\n";
+            return false;
+        }
+
+        newWarp.push_back({x, y});
+    }
+
+    std::cout << "Advanced Dialog Validation Success\n";
+    setWarpPosition(newWarp);
     return true;
+}
+
+void Configurations::setWarpPosition(std::vector<std::pair<int, int>> &newWarp)
+{
+    while (newWarp.size() < nLoops)
+        newWarp.push_back(
+            {std::rand() % DEFAULT_OUTVID_RESOLUTION_X, std::rand() % DEFAULT_OUTVID_RESOLUTION_Y});
+
+    WarpPosition = newWarp;
 }

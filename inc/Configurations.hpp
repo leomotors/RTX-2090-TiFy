@@ -37,4 +37,7 @@ class Configurations
     std::string getPositionsAsString();
     // * Validate and If Pass, Sending data to Configurations
     bool validate(std::string ToValidate);
+
+  private:
+    void setWarpPosition(std::vector<std::pair<int,int>> &newWarp);
 };

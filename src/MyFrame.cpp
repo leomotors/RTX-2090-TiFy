@@ -102,18 +102,20 @@ void MyFrame::OnSaveFile(wxCommandEvent &event)
 
 void MyFrame::OnAdvanced(wxCommandEvent &event)
 {
-    const char *tmpMsg{"These are the warp positions\nIf set empty, will be generated again."};
+    const char *tmpMsg{"These are the warp positions\nIf set empty, will be generated again"};
     wxTextEntryDialog AdvancedDialog(this, tmpMsg, "Advanced Settings",
                                      ConfigList.getPositionsAsString(), wxTextEntryDialogStyle,
                                      wxDefaultPosition);
 
     if (AdvancedDialog.ShowModal() == wxID_OK)
     {
-        if (ConfigList.validate(AdvancedDialog.GetValue().ToStdString()) == wxID_OK)
+        if (ConfigList.validate(AdvancedDialog.GetValue().ToStdString()))
+        {
             return;
+        }
         else
         {
-            std::cout << "Advanced Dialog: Validation Failed\n";
+            return;
         }
     }
 }
