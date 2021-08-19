@@ -21,8 +21,8 @@ include_directories(inc)
 target_link_libraries(main ${wxWidgets_LIBRARIES})
 target_link_libraries(main ${OpenCV_LIBS})
 
-# C++17
-set_property(TARGET main PROPERTY CXX_STANDARD 17)
+# C++20
+set_property(TARGET main PROPERTY CXX_STANDARD 20)
 
 # Add Warning Flags
 if(MSVC)
