@@ -67,7 +67,8 @@ void MyFrame::OnAbout(wxCommandEvent &event)
 
 void MyFrame::OnOpenFile(wxCommandEvent &event)
 {
-    wxFileDialog openFileDialog(this, "Open Image file", ".", "", "Image Files (*.jpg)|*.jpg",
+    wxFileDialog openFileDialog(this, "Open Image file", ".", "",
+                                "Image Files (*.jpg;*.png)|*.jpg;*.png",
                                 wxFD_OPEN | wxFD_FILE_MUST_EXIST);
 
     if (openFileDialog.ShowModal() == wxID_CANCEL)
