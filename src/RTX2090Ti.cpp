@@ -171,14 +171,8 @@ void RTX2090Ti::renderPixel(int c, int r, std::pair<int, int> &Start, std::pair<
         cv::Mat toRender;
         cv::resize(BaseImage, toRender, cv::Size(normalizedPic.cols, normalizedPic.rows));
 
-        try
-        {
-            toRender.copyTo(RenderOn(renderRange));
-        }
-        catch (...)
-        {
-            std::cout << renderOnPos << " " << renderEnd << "\n";
-        }
+        safeCopyTo(toRender, RenderOn, renderRange);
+
         return;
     }
 
