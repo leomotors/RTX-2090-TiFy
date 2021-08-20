@@ -6,6 +6,7 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
 #include <string>
+#include <tuple>
 #include <utility>
 #include <wx/progdlg.h>
 #include <wx/wx.h>
