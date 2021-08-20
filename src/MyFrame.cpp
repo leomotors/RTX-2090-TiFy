@@ -112,7 +112,13 @@ void MyFrame::OnAdvanced(wxCommandEvent &event)
                                     wxDefaultPosition);
 
     if (WarpSetDialog.ShowModal() == wxID_OK)
-        ConfigList.validate(WarpSetDialog.GetValue().ToStdString());
+    {
+        std::string traceback = ConfigList.validateWarp(WarpSetDialog.GetValue().ToStdString());
+        if (!traceback.empty())
+        {
+            wxMessageBox(traceback, "Validation Failed: Value not set", wxOK | wxICON_ERROR);
+        }
+    }
     else
         std::cout << "Warp Points Settings Cancelled by User\n";
 }

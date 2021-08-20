@@ -69,7 +69,7 @@ std::string Configurations::getPositionsAsString()
     return result_str;
 }
 
-bool Configurations::validate(std::string ToValidate)
+std::string Configurations::validateWarp(std::string ToValidate)
 {
     std::stringstream ss(ToValidate);
 
@@ -82,8 +82,7 @@ bool Configurations::validate(std::string ToValidate)
 
     if (word_arr.size() > nLoops)
     {
-        std::cout << "Warp Points Settings Validation Failed: Too Many Points\n";
-        return false;
+        return "Too Many Points Recieved";
     }
 
     std::vector<std::pair<int, int>> newWarp;
@@ -94,16 +93,16 @@ bool Configurations::validate(std::string ToValidate)
 
         if (x < 0 || x >= Resolution.first)
         {
-            std::cout << "Warp Points Settings Validation Failed: X (" + std::to_string(x) +
-                             ") not in Range\n";
-            return false;
+            std::string traceback = "The Value x of " + std::to_string(x) + " from " + word +
+                                    " is not in the acceptable range.";
+            return traceback;
         }
 
         if (y < 0 || y >= Resolution.second)
         {
-            std::cout << "Warp Points Settings Validation Failed: Y (" + std::to_string(y) +
-                             ") not in Range\n";
-            return false;
+            std::string traceback = "The Value y of " + std::to_string(y) + " from " + word +
+                                    " is not in the acceptable range.";
+            return traceback;
         }
 
         newWarp.push_back({x, y});
@@ -111,7 +110,7 @@ bool Configurations::validate(std::string ToValidate)
 
     std::cout << "Warp Points Settings Validation Success and Set\n";
     setWarpPosition(newWarp);
-    return true;
+    return "";
 }
 
 bool Configurations::isRTXReady()

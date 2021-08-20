@@ -37,7 +37,7 @@ build
 
 # Executable
 
-main
+RTX2090TiFy
 
 # VSCode
 
@@ -45,5 +45,4 @@ main
 
 # Exports
 *.avi
-*.mp3
 *.mp4

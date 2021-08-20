@@ -60,6 +60,7 @@ bool RTX2090Ti::buildVideo()
             std::pair<int, int> LocalEnd{End.first + right * expansionRate,
                                          End.second + down * expansionRate};
             OutVideo.write(BaseImage);
+            cv::imshow("Live Preview", BaseImage);
             BuildProgress.Update(framesDone + f,
                                  statusMessage(loopDone, Config.nLoops, f, totalFrames));
         }
@@ -67,14 +68,32 @@ bool RTX2090Ti::buildVideo()
         loopDone++;
     }
 
+    cv::destroyAllWindows();
     OutVideo.release();
     std::cout << "Build Success (ทิพย์)\n";
 
     auto end{std::clock()};
 
-    std::cout << "da Built took " << (double)(end - start) / CLOCKS_PER_SEC << " secs.\n";
+    double time_took = (double)(end - start) / CLOCKS_PER_SEC;
+    std::cout << "da Built took " << time_took << " secs.\n";
+
+    wxMessageDialog doneMessage(parent,
+                                "Build Success! Took " + std::to_string(time_took) +
+                                    " seconds.\nYour Video is Ready, wanna open it right away?",
+                                "Build Success", wxOK | wxCANCEL);
+
+    if (doneMessage.ShowModal() == wxID_OK)
+    {
+        wxLaunchDefaultBrowser("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+        std::cout << "Going to Rick Roll the user... :)\n";
+    }
 
     return true;
+}
+
+void RTX2090Ti::linkAudio()
+{
+    return;
 }
 
 std::string RTX2090Ti::statusMessage(int loopsDone, int allLoops, int framesDone, int allFrames)

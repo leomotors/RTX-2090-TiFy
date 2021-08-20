@@ -38,8 +38,8 @@ class Configurations
     void setOutputPath(std::string &outputPath);
 
     std::string getPositionsAsString();
-    // * Validate and If Pass, Sending data to Configurations
-    bool validate(std::string ToValidate);
+    // * Validate and If Pass, Set it. Return empty string if pass, else traceback
+    std::string validateWarp(std::string ToValidate);
     bool isRTXReady();
 
   private:

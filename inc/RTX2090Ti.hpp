@@ -19,9 +19,10 @@ class RTX2090Ti
 
   public:
     RTX2090Ti(wxWindow *parent, cv::Mat BaseImage, Configurations Config);
-    // * Build Video, Configuration is confirmed to be Ready for RTX
+    // * Build Video, Configuration must be confirmed to be Ready for RTX
     bool buildVideo();
 
   private:
+    void linkAudio();
     std::string statusMessage(int loopsDone, int allLoops, int framesDone, int allFrames);
 };
