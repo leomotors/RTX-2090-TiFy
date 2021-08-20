@@ -40,7 +40,8 @@ class Configurations
     std::string getPositionsAsString();
     // * Validate and If Pass, Set it. Return empty string if pass, else traceback
     std::string validateWarp(std::string ToValidate);
-    bool isRTXReady();
+    // * Returns Empty String if is Ready, otherwise return error message
+    std::string isRTXReady();
 
   private:
     void setWarpPosition(std::vector<std::pair<int, int>> &newWarp);

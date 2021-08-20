@@ -1,5 +1,6 @@
 #include "RTX2090Ti.hpp"
 
+#include <cstdlib>
 #include <ctime>
 #include <opencv2/opencv.hpp>
 #include <wx/progdlg.h>
@@ -7,12 +8,13 @@
 
 #include "Configurations.hpp"
 
-RTX2090Ti::RTX2090Ti(wxWindow *parent, cv::Mat BaseImage, Configurations Config)
+RTX2090Ti::RTX2090Ti(wxWindow *parent, cv::Mat BaseImage, Configurations &Config)
     : parent(parent), Config(Config), fourcc(cv::VideoWriter::fourcc(MYCODEC))
 {
     const auto &[x, y] = Config.Resolution;
 
     cv::resize(BaseImage, this->BaseImage, cv::Size(x, y));
+
     OutVideo = cv::VideoWriter(Config.OutVideoPath + ".avi", fourcc, Config.FPS, cv::Size(x, y));
 }
 
@@ -70,7 +72,10 @@ bool RTX2090Ti::buildVideo()
 
     cv::destroyAllWindows();
     OutVideo.release();
-    std::cout << "Build Success (ทิพย์)\n";
+    std::cout << "Video Build Success (ทิพย์)\n";
+
+    BuildProgress.Update(totalFrames * Config.nLoops, "Linking Audio...");
+    linkAudio();
 
     auto end{std::clock()};
 
@@ -93,6 +98,14 @@ bool RTX2090Ti::buildVideo()
 
 void RTX2090Ti::linkAudio()
 {
+    std::string toExec("ffmpeg -i ");
+    toExec += Config.OutVideoPath +
+              ".avi -i ./assets/RTX.mp3 -b:a 384k -map 0:v:0 -map 1:a:0 -c:v copy -shortest ";
+    toExec += Config.OutVideoPath + ".mp4";
+
+    std::cout << "Executing: " << toExec << "\n";
+    std::system(toExec.c_str());
+    std::cout << "FFmpeg: Linking Audio Success\n";
     return;
 }
 

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(RTX-2090-TiFy VERSION 1.0.5)
+project(RTX-2090-TiFy VERSION 1.0.7)
 set(APP_VERSION "${CMAKE_PROJECT_VERSION}")
 configure_file(config/AppProps.h.in ${CMAKE_CURRENT_BINARY_DIR}/gen/AppProps.h)
 
@@ -31,7 +31,7 @@ set_property(TARGET RTX2090TiFy PROPERTY CXX_STANDARD 20)
 if(MSVC)
     add_compile_options(/Wall)
 else()
-    set(CMAKE_CXX_FLAGS "-O3")
+    set(CMAKE_CXX_FLAGS "-Wno-unused-result -O3")
 endif()
 
 # Moving Executable to Project Root (! Maybe changed)

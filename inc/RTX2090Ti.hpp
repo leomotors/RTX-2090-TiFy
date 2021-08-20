@@ -18,7 +18,7 @@ class RTX2090Ti
     wxWindow *parent;
 
   public:
-    RTX2090Ti(wxWindow *parent, cv::Mat BaseImage, Configurations Config);
+    RTX2090Ti(wxWindow *parent, cv::Mat BaseImage, Configurations &Config);
     // * Build Video, Configuration must be confirmed to be Ready for RTX
     bool buildVideo();
 

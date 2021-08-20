@@ -125,15 +125,17 @@ void MyFrame::OnAdvanced(wxCommandEvent &event)
 
 void MyFrame::OnGenerate(wxCommandEvent &event)
 {
-    if (ConfigList.isRTXReady())
+    std::string traceback = ConfigList.isRTXReady();
+    if (traceback.empty())
     {
+        std::cout << "in ongenerate: ";
+        ConfigList.fuckIntellisense();
         RTX2090Ti RTX(this, Image.getImage(), ConfigList);
         RTX.buildVideo();
     }
     else
     {
-        wxMessageBox("Your Settings is not valid, please try again.",
-                     "Build Aborted: Not RTX Ready", wxOK | wxICON_ERROR);
+        wxMessageBox(traceback, "Build Aborted: Not RTX Ready", wxOK | wxICON_ERROR);
     }
 
     return;

@@ -113,15 +113,19 @@ std::string Configurations::validateWarp(std::string ToValidate)
     return "";
 }
 
-bool Configurations::isRTXReady()
+std::string Configurations::isRTXReady()
 {
-    if (OutVideoPath.empty())
+    if (ImageHandlerRef.getImagePath().empty())
     {
-        std::cout << "Not RTX Ready: No Output File\n";
-        return false;
+        return "Input Path is Empty";
     }
 
-    return true;
+    if (OutVideoPath.empty())
+    {
+        return "Output Path is Empty";
+    }
+
+    return "";
 }
 
 void Configurations::setWarpPosition(std::vector<std::pair<int, int>> &newWarp)
