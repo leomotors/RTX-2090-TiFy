@@ -19,6 +19,7 @@ Also, My First GUI Program on C++
 - [wxWidgets 3.1.5 (C++ Library)](https://github.com/wxWidgets/wxWidgets)
 - [OpenCV 4.5.3 (C++ Library)](https://github.com/opencv/opencv)
 - [FFmpeg (Command Line)](https://github.com/FFmpeg/FFmpeg)
+- Compiler: Require C++20 and #pragma once (should exist everywhere?)
 
 ## ⚙️ Compatibility
 
@@ -27,3 +28,4 @@ Also, My First GUI Program on C++
 - Linux ✔️
   - Ubuntu 20.04 on Windows Linux Subsystem (Kernel 5.10.43.3 with WSLg 1.0.26)
   - Windows 11 Build 22000
+  - gcc 9.3.0
