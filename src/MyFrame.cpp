@@ -128,8 +128,6 @@ void MyFrame::OnGenerate(wxCommandEvent &event)
     std::string traceback = ConfigList.isRTXReady();
     if (traceback.empty())
     {
-        std::cout << "in ongenerate: ";
-        ConfigList.fuckIntellisense();
         RTX2090Ti RTX(this, Image.getImage(), ConfigList);
         RTX.buildVideo();
     }

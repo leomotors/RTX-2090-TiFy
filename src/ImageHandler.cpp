@@ -10,6 +10,7 @@ bool ImageHandler::loadFile(std::string &filename)
 {
     ImagePath = filename;
     Image = cv::imread(filename);
+    ImageGray = cv::imread(filename, cv::IMREAD_GRAYSCALE);
     ImgRes.first = Image.cols;
     ImgRes.second = Image.rows;
     return true;

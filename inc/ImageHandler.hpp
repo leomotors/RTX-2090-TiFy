@@ -9,6 +9,7 @@ class ImageHandler
   private:
     std::string ImagePath;
     cv::Mat Image;
+    cv::Mat ImageGray;
     std::pair<int, int> ImgRes;
 
   public:

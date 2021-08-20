@@ -1,5 +1,6 @@
 #include "RTX2090Ti.hpp"
 
+#include <cmath>
 #include <cstdlib>
 #include <ctime>
 #include <opencv2/opencv.hpp>
@@ -7,22 +8,26 @@
 #include <wx/wx.h>
 
 #include "Configurations.hpp"
+#include "ImageUtils.hpp"
 
 RTX2090Ti::RTX2090Ti(wxWindow *parent, cv::Mat BaseImage, Configurations &Config)
     : parent(parent), Config(Config), fourcc(cv::VideoWriter::fourcc(MYCODEC))
 {
     const auto &[x, y] = Config.Resolution;
+    cols = x;
+    rows = y;
 
     cv::resize(BaseImage, this->BaseImage, cv::Size(x, y));
+    cv::cvtColor(BaseImage, BaseImageGray, cv::COLOR_BGR2GRAY);
 
-    OutVideo = cv::VideoWriter(Config.OutVideoPath + ".avi", fourcc, Config.FPS, cv::Size(x, y));
+    OutVideo =
+        cv::VideoWriter(Config.OutVideoPath + ".avi", fourcc, Config.FPS, cv::Size(cols, rows));
 }
 
 bool RTX2090Ti::buildVideo()
 {
     auto start{std::clock()};
 
-    const auto &[cols, rows] = Config.Resolution;
     const int bigcols = cols * cols;
     const int bigrows = rows * rows;
 
@@ -41,6 +46,7 @@ bool RTX2090Ti::buildVideo()
               << "Total of: " << totalFrames * Config.nLoops << " frames\n";
 
     int loopDone{0};
+    cv::Mat temp(cv::Mat::zeros(cols, rows, CV_8UC3));
 
     for (std::pair<int, int> &point : Config.WarpPosition)
     {
@@ -61,8 +67,11 @@ bool RTX2090Ti::buildVideo()
                                            Start.second - up * expansionRate};
             std::pair<int, int> LocalEnd{End.first + right * expansionRate,
                                          End.second + down * expansionRate};
-            OutVideo.write(BaseImage);
-            cv::imshow("Live Preview", BaseImage);
+
+            RayTracing(temp, LocalStart, LocalEnd);
+
+            OutVideo.write(temp);
+            cv::imshow("Live Preview", temp);
             BuildProgress.Update(framesDone + f,
                                  statusMessage(loopDone, Config.nLoops, f, totalFrames));
         }
@@ -94,6 +103,16 @@ bool RTX2090Ti::buildVideo()
     }
 
     return true;
+}
+
+void RTX2090Ti::RayTracing(cv::Mat &canvas, std::pair<int, int> &Start, std::pair<int, int> &End)
+{
+
+    std::pair<int, int> BigTileStart{Start.first / cols, Start.second / rows};
+    std::pair<int, int> BigTileEnd{std::ceil((double)End.first / cols),
+                                   std::ceil((double)End.second / rows)};
+
+    canvas = Corgi::changeTone(BaseImageGray, std::tuple<int, int, int>(0, 0, 255));
 }
 
 void RTX2090Ti::linkAudio()

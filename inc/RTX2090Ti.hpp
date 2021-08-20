@@ -11,9 +11,11 @@ class RTX2090Ti
 {
   private:
     cv::Mat BaseImage;
+    cv::Mat BaseImageGray;
     Configurations &Config;
     int fourcc;
     cv::VideoWriter OutVideo;
+    int cols, rows;
 
     wxWindow *parent;
 
@@ -23,6 +25,7 @@ class RTX2090Ti
     bool buildVideo();
 
   private:
+    void RayTracing(cv::Mat &canvas, std::pair<int, int> &Start, std::pair<int, int> &End);
     void linkAudio();
     std::string statusMessage(int loopsDone, int allLoops, int framesDone, int allFrames);
 };
