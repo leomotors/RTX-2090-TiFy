@@ -1,6 +1,8 @@
 #pragma once
 
 #include <opencv2/opencv.hpp>
+#include <string>
+#include <utility>
 #include <wx/wx.h>
 
 #include "Configurations.hpp"
@@ -25,7 +27,12 @@ class RTX2090Ti
     bool buildVideo();
 
   private:
-    void RayTracing(cv::Mat &canvas, std::pair<int, int> &Start, std::pair<int, int> &End);
+    // * For each Frames
+    void RayTracing(cv::VideoWriter &OutVideo, std::pair<int, int> &Start, std::pair<int, int> &End,
+                    std::pair<int, int> &OriginalLoc);
+    void renderPixel(int c, int r, std::pair<int, int> &Start, std::pair<int, int> &End,
+                     cv::Mat &normalizedPic, cv::Mat &RenderOn, std::pair<int, int> &OriginalLoc);
+    void safeCopyTo(cv::Mat&src, cv::Mat &dest, cv::Rect& roi);
     void linkAudio();
     std::string statusMessage(int loopsDone, int allLoops, int framesDone, int allFrames);
 };
