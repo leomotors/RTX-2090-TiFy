@@ -4,7 +4,7 @@
 #include <wx/listctrl.h>
 #include <wx/wx.h>
 
-#include "AppProps.h"
+#include "AboutApp.hpp"
 #include "Events.hpp"
 #include "ImageHandler.hpp"
 #include "RTX2090Ti.hpp"
@@ -48,11 +48,6 @@ MyFrame::MyFrame(const wxString &title, const wxPoint &pos, const wxSize &size)
 
     // * Set Sizer And Fit
     this->SetSizerAndFit(mainColumn);
-
-    // * Configure About App
-    AboutApp = "Turns you into RTX 2090 Ti\nApp Version: ";
-    AboutApp += APP_VERSION;
-    AboutApp += "\nCreated by Leomotors";
 }
 
 void MyFrame::OnExit(wxCommandEvent &event)
@@ -62,7 +57,7 @@ void MyFrame::OnExit(wxCommandEvent &event)
 
 void MyFrame::OnAbout(wxCommandEvent &event)
 {
-    wxMessageBox(AboutApp, "About RTX 2090 TiFy", wxOK | wxICON_INFORMATION);
+    wxMessageBox(App::aboutApp(), "About RTX 2090 TiFy", wxOK | wxICON_INFORMATION);
 }
 
 void MyFrame::OnOpenFile(wxCommandEvent &event)

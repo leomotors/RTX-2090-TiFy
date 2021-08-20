@@ -55,7 +55,7 @@ bool RTX2090Ti::buildVideo()
         int framesDone = loopDone * totalFrames;
 
         std::pair<int, int> Start{point.first * cols, point.second * rows};
-        std::pair<int, int> End{point.first * (cols + 1), point.second * (rows + 1)};
+        std::pair<int, int> End{(point.first + 1) * cols, (point.second + 1) * rows + 1};
 
         int left = cols * point.first;
         int up = rows * point.second;
@@ -178,7 +178,6 @@ void RTX2090Ti::renderPixel(int c, int r, std::pair<int, int> &Start, std::pair<
     }
 
     // * General Case
-
     safeCopyTo(ColoredImg, RenderOn, renderRange);
 }
 
