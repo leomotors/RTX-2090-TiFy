@@ -21,6 +21,7 @@ class MyFrame : public wxFrame
   private:
     void OnExit(wxCommandEvent &event);
     void OnAbout(wxCommandEvent &event);
+    void OnGitHub(wxCommandEvent &event);
 
     void OnOpenFile(wxCommandEvent &event);
     void OnSaveFile(wxCommandEvent &event);

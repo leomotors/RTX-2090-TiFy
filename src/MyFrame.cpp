@@ -5,6 +5,7 @@
 #include <wx/wx.h>
 
 #include "AboutApp.hpp"
+#include "AppConstants.h"
 #include "Events.hpp"
 #include "ImageHandler.hpp"
 #include "RTX2090Ti.hpp"
@@ -13,11 +14,12 @@ MyFrame::MyFrame(const wxString &title, const wxPoint &pos, const wxSize &size)
     : wxFrame(nullptr, wxID_ANY, title, pos, size), ConfigList(Configurations(this, Image))
 {
     // * Menu bar
-    wxMenu *menuHelp = new wxMenu;
-    menuHelp->Append(wxID_ABOUT);
+    wxMenu *menuAbout = new wxMenu;
+    menuAbout->Append(GITHUB_MENU, "Visit GitHub Page");
+    menuAbout->Append(wxID_ABOUT, "About App");
 
     wxMenuBar *menuBar = new wxMenuBar;
-    menuBar->Append(menuHelp, "&Help");
+    menuBar->Append(menuAbout, "&Menu");
 
     SetMenuBar(menuBar);
 
@@ -50,6 +52,8 @@ MyFrame::MyFrame(const wxString &title, const wxPoint &pos, const wxSize &size)
     this->SetSizerAndFit(mainColumn);
 }
 
+// * App Menu Events
+
 void MyFrame::OnExit(wxCommandEvent &event)
 {
     Close(true);
@@ -59,6 +63,14 @@ void MyFrame::OnAbout(wxCommandEvent &event)
 {
     wxMessageBox(App::aboutApp(), "About RTX 2090 TiFy", wxOK | wxICON_INFORMATION);
 }
+
+void MyFrame::OnGitHub(wxCommandEvent &event)
+{
+    std::cout << "Opening RTX 2090 TiFy's GitHub Page\n";
+    wxLaunchDefaultBrowser(GITHUB_URL);
+}
+
+// * Application Events
 
 void MyFrame::OnOpenFile(wxCommandEvent &event)
 {

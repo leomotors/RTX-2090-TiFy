@@ -11,6 +11,7 @@
 #include <wx/progdlg.h>
 #include <wx/wx.h>
 
+#include "AppConstants.h"
 #include "Configurations.hpp"
 #include "CorgiAlgorithm.hpp"
 
@@ -101,7 +102,7 @@ bool RTX2090Ti::buildVideo()
 
     if (doneMessage.ShowModal() == wxID_OK)
     {
-        wxLaunchDefaultBrowser("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+        wxLaunchDefaultBrowser(RICKROLL_URL);
         std::cout << "Going to Rick Roll the user... :)\n";
     }
 
@@ -244,7 +245,8 @@ void RTX2090Ti::linkAudio()
 {
     std::string toExec("ffmpeg -i ");
     toExec += Config.OutVideoPath +
-              ".avi -i ./assets/RTX.mp3 -b:a 384k -map 0:v:0 -map 1:a:0 -c:v copy -shortest ";
+              ".avi -i ./assets/RTX.mp3 -b:a 384k -b:v 1024k -map 0:v:0 -map 1:a:0 -c:v "
+              "copy -shortest ";
     toExec += Config.OutVideoPath + ".mp4";
 
     std::cout << "Executing: " << toExec << "\n";
