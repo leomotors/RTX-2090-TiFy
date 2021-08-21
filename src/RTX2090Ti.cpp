@@ -1,8 +1,7 @@
 #include "RTX2090Ti.hpp"
 
+#include <chrono>
 #include <cmath>
-#include <cstdlib>
-#include <ctime>
 #include <iostream>
 #include <opencv2/opencv.hpp>
 #include <string>
@@ -33,7 +32,7 @@ RTX2090Ti::RTX2090Ti(wxWindow *parent, cv::Mat BaseImage, Configurations &Config
 
 bool RTX2090Ti::buildVideo()
 {
-    auto start{std::clock()};
+    auto start{std::chrono::steady_clock::now()};
 
     int totalFrames = Config.FPS * Config.LoopDuration;
 
@@ -87,17 +86,15 @@ bool RTX2090Ti::buildVideo()
     OutVideo.release();
     std::cout << "Video Build Success\n";
 
-    BuildProgress.Update(totalFrames * Config.nLoops, "Linking Audio...");
-
     Video::linkAudio(Config.OutVideoPath + ".avi", Config.OutVideoPath + ".mp4");
 
-    auto end{std::clock()};
+    auto end{std::chrono::steady_clock::now()};
 
-    double time_took = (double)(end - start) / CLOCKS_PER_SEC;
-    std::cout << "da Built took " << time_took << " secs.\n";
+    std::chrono::duration<double> time_took = end - start;
+    std::cout << "Building Video took " << time_took.count() << " secs.\n";
 
     wxMessageDialog doneMessage(parent,
-                                "Build Success! Took " + std::to_string(time_took) +
+                                "Build Success! Took " + std::to_string(time_took.count()) +
                                     " seconds.\nYour Video is Ready, wanna open it right away?",
                                 "Build Success", wxOK | wxCANCEL);
 
@@ -164,9 +161,6 @@ void RTX2090Ti::renderPixel(int c, int r, std::pair<int, int> &Start, std::pair<
     cv::Point renderEnd(renderOnPos.x + normalizedPic.cols, renderOnPos.y + normalizedPic.rows);
 
     cv::Rect renderRange(renderOnPos, renderEnd);
-
-    assert(normalizedPic.cols <= cols);
-    assert(normalizedPic.rows <= rows);
 
     // * Case: Original Picture
     if (c == OriginalLoc.first && r == OriginalLoc.second)
