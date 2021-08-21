@@ -16,8 +16,8 @@ Also, My First GUI Program on C++
 
 ## 🌿 Dependencies
 
-- [wxWidgets 3.1.5 (C++ Library)](https://github.com/wxWidgets/wxWidgets) with FFmpeg Enabled
-- [OpenCV 4.5.3 (C++ Library)](https://github.com/opencv/opencv)
+- [wxWidgets 3.1.5 (C++ Library)](https://github.com/wxWidgets/wxWidgets)
+- [OpenCV 4.5.3 (C++ Library)](https://github.com/opencv/opencv) with FFmpeg Enabled
 - [FFmpeg (Command Line)](https://github.com/FFmpeg/FFmpeg)
 - Compiler: Require C++20 and #pragma once (should exist everywhere?)
 
