@@ -14,6 +14,7 @@
 #include "AppConstants.h"
 #include "Configurations.hpp"
 #include "CorgiAlgorithm.hpp"
+#include "Video.hpp"
 
 RTX2090Ti::RTX2090Ti(wxWindow *parent, cv::Mat BaseImage, Configurations &Config)
     : parent(parent), Config(Config), fourcc(cv::VideoWriter::fourcc(MYCODEC))
@@ -66,7 +67,7 @@ bool RTX2090Ti::buildVideo()
         for (int f = 1; f <= totalFrames; f++)
         {
             double expansionRate = (double)f / totalFrames;
-            expansionRate = std::pow(expansionRate, 2.5);
+            expansionRate = std::pow(expansionRate, 2.75);
 
             std::pair<int, int> LocalStart{Start.first - left * expansionRate,
                                            Start.second - up * expansionRate};
@@ -88,7 +89,7 @@ bool RTX2090Ti::buildVideo()
 
     BuildProgress.Update(totalFrames * Config.nLoops, "Linking Audio...");
 
-    linkAudio();
+    Video::linkAudio(Config.OutVideoPath + ".avi", Config.OutVideoPath + ".mp4");
 
     auto end{std::clock()};
 
@@ -239,20 +240,6 @@ void RTX2090Ti::safeCopyTo(cv::Mat &src, cv::Mat &dest, cv::Rect &roi)
     }
 
     src.copyTo(dest(roi));
-}
-
-void RTX2090Ti::linkAudio()
-{
-    std::string toExec("ffmpeg -i ");
-    toExec += Config.OutVideoPath +
-              ".avi -i ./assets/RTX.mp3 -b:a 384k -b:v 1024k -map 0:v:0 -map 1:a:0 -c:v "
-              "copy -shortest ";
-    toExec += Config.OutVideoPath + ".mp4";
-
-    std::cout << "Executing: " << toExec << "\n";
-    std::system(toExec.c_str());
-    std::cout << "FFmpeg: Linking Audio Success\n";
-    return;
 }
 
 std::string RTX2090Ti::statusMessage(int loopsDone, int allLoops, int framesDone, int allFrames)
