@@ -1,5 +1,6 @@
 #include "MyFrame.hpp"
 
+#include <cstdlib>
 #include <opencv2/opencv.hpp>
 #include <wx/listctrl.h>
 #include <wx/wx.h>
@@ -37,6 +38,7 @@ MyFrame::MyFrame(const wxString &title, const wxPoint &pos, const wxSize &size)
     mainColumn->Add(FileInputRow, 0, wxCENTER | wxLEFT | wxRIGHT | wxUP, 10);
 
     // * Sub-Row: Configuration List
+    mainColumn->Add(new wxStaticText(this, wxID_ANY, "Your Configurations:"), 0, wxLEFT | wxUP, 10);
     mainColumn->Add(ConfigList.getListView(), 4, wxEXPAND | wxALL, 10);
 
     // * Sub-Row: Action Buttons
@@ -45,6 +47,8 @@ MyFrame::MyFrame(const wxString &title, const wxPoint &pos, const wxSize &size)
                    wxSTRETCH_NOT | wxALIGN_LEFT, 30);
     buttonBar->Add(new wxButton(this, GENERATE_BUTTON, "Generate!"), 0,
                    wxSTRETCH_NOT | wxALIGN_RIGHT, 30);
+    buttonBar->Add(new wxButton(this, OPEN_IN_FILE_EXPLORER, "Open in File Explorer"), 0,
+                   wxALIGN_RIGHT, 30);
 
     mainColumn->Add(buttonBar, 0, wxEXPAND | wxALL, 5);
 
@@ -145,4 +149,10 @@ void MyFrame::OnGenerate(wxCommandEvent &event)
     }
 
     return;
+}
+
+void MyFrame::OnFileExplorer(wxCommandEvent &event)
+{
+    // TODO go to exports directory based on settings, Support other file explorer
+    std::system("explorer.exe .");
 }
