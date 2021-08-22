@@ -2,6 +2,7 @@
 
 #include <chrono>
 #include <cmath>
+#include <cstdlib>
 #include <iostream>
 #include <opencv2/opencv.hpp>
 #include <string>
@@ -93,15 +94,21 @@ bool RTX2090Ti::buildVideo()
     std::chrono::duration<double> time_took = end - start;
     std::cout << "Building Video took " << time_took.count() << " secs.\n";
 
-    wxMessageDialog doneMessage(parent,
-                                "Build Success! Took " + std::to_string(time_took.count()) +
-                                    " seconds.\nYour Video is Ready, wanna open it right away?",
-                                "Build Success", wxOK | wxCANCEL);
+    wxMessageDialog doneMessage(
+        parent,
+        "Build Success! Took " + std::to_string(time_took.count()) +
+            " seconds.\nYour Video is Ready, would you like to open default exports directory?",
+        "Build Success", wxOK | wxCANCEL);
 
     if (doneMessage.ShowModal() == wxID_OK)
     {
-        wxLaunchDefaultBrowser(RICKROLL_URL);
-        std::cout << "Going to Rick Roll the user... :)\n";
+        std::string path_to_open = ".";
+
+        std::string toExec = DEFAULT_FILE_EXPLORER;
+        toExec += " " + path_to_open;
+
+        std::cout << "Executing: " << toExec << "\n";
+        std::system(toExec.c_str());
     }
 
     return true;

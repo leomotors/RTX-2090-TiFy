@@ -4,7 +4,12 @@
 
 #include "AppProps.h"
 
-std::string App::aboutApp()
+std::string App::aboutAppSimple()
+{
+    return std::string("RTX 2090 TiFy  ") + APP_VERSION;
+}
+
+std::string App::aboutAppLong()
 {
     std::string AboutApp = "Turns you into RTX 2090 Ti\nApp Version: ";
     AboutApp += APP_VERSION;

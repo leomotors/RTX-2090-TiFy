@@ -4,5 +4,6 @@
 
 namespace App
 {
-std::string aboutApp();
-}
+std::string aboutAppSimple();
+std::string aboutAppLong();
+} // namespace App

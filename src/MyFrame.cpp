@@ -47,8 +47,6 @@ MyFrame::MyFrame(const wxString &title, const wxPoint &pos, const wxSize &size)
                    wxSTRETCH_NOT | wxALIGN_LEFT, 30);
     buttonBar->Add(new wxButton(this, GENERATE_BUTTON, "Generate!"), 0,
                    wxSTRETCH_NOT | wxALIGN_RIGHT, 30);
-    buttonBar->Add(new wxButton(this, OPEN_IN_FILE_EXPLORER, "Open in File Explorer"), 0,
-                   wxALIGN_RIGHT, 30);
 
     mainColumn->Add(buttonBar, 0, wxEXPAND | wxALL, 5);
 
@@ -65,7 +63,7 @@ void MyFrame::OnExit(wxCommandEvent &event)
 
 void MyFrame::OnAbout(wxCommandEvent &event)
 {
-    wxMessageBox(App::aboutApp(), "About RTX 2090 TiFy", wxOK | wxICON_INFORMATION);
+    wxMessageBox(App::aboutAppLong(), "About RTX 2090 TiFy", wxOK | wxICON_INFORMATION);
 }
 
 void MyFrame::OnGitHub(wxCommandEvent &event)
@@ -98,7 +96,7 @@ void MyFrame::OnOpenFile(wxCommandEvent &event)
 
 void MyFrame::OnSaveFile(wxCommandEvent &event)
 {
-    wxFileDialog saveFileDialog(this, "Save Video File", ".", "", "MP4 File (*.mp4)|*.mp4",
+    wxFileDialog saveFileDialog(this, "Save Video File", "./exports", "", "MP4 File (*.mp4)|*.mp4",
                                 wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 
     if (saveFileDialog.ShowModal() == wxID_CANCEL)
@@ -149,10 +147,4 @@ void MyFrame::OnGenerate(wxCommandEvent &event)
     }
 
     return;
-}
-
-void MyFrame::OnFileExplorer(wxCommandEvent &event)
-{
-    // TODO go to exports directory based on settings, Support other file explorer
-    std::system("explorer.exe .");
 }
