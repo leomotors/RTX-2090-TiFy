@@ -271,6 +271,7 @@ std::string Configurations::validateConfig(int itemID, std::string toValidate)
                    " will make video not exist!";
 
         nLoops = nLoopsNew;
+        setWarpPosition();
         break;
     }
     default:

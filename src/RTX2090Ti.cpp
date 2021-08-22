@@ -87,7 +87,7 @@ bool RTX2090Ti::buildVideo()
     OutVideo.release();
     std::cout << "Video Build Success\n";
 
-    Video::linkAudio(Config.OutVideoPath);
+    Video::linkAudio(Config.OutVideoPath, Config.LoopDuration * Config.nLoops);
 
     auto end{std::chrono::steady_clock::now()};
 

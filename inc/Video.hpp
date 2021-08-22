@@ -4,5 +4,5 @@
 
 namespace Video
 {
-void linkAudio(std::string fileName);
+void linkAudio(std::string fileName, double videoLength);
 }

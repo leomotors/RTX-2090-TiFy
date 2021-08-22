@@ -6,8 +6,30 @@
 
 #include "AppConstants.h"
 
-void Video::linkAudio(std::string fileName)
+void Video::linkAudio(std::string fileName, double videoLength)
 {
+    std::string MusicUsed = RTX_MUSIC;
+
+    if (videoLength > RTX_LEN)
+    {
+        int concatLen = videoLength / RTX_LEN + 1;
+
+        std::string subconcat = RTX_MUSIC;
+        for (int i = 1; i < concatLen; i++)
+        {
+            subconcat += '|';
+            subconcat += RTX_MUSIC;
+        }
+
+        std::string concatCMD = "ffmpeg -i ";
+        concatCMD += "\"concat:" + subconcat + "\" -acodec copy ./temp/RTXLONG.mp3";
+
+        std::cout << "Executing: " << concatCMD << "\n";
+        std::system(concatCMD.c_str());
+
+        MusicUsed = "./temp/RTXLONG.mp3";
+    }
+
     std::string safeFileName;
     for (char c : fileName)
     {
@@ -27,7 +49,7 @@ void Video::linkAudio(std::string fileName)
     std::system(lowerBitrateCommand.c_str());
 
     std::string linkAudioCommand("ffmpeg -y -i ");
-    linkAudioCommand += safeFileName + ".temp.avi -i " + RTX_MUSIC +
+    linkAudioCommand += safeFileName + ".temp.avi -i " + MusicUsed +
                         " -b:a 384k -map 0:v:0 -map 1:a:0 -c:v "
                         "copy -shortest ";
     linkAudioCommand += safeFileName + ".mp4";

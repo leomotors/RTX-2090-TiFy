@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(RTX-2090-TiFy VERSION 1.0.52.105)
+project(RTX-2090-TiFy VERSION 1.0.52.110)
 set(APP_VERSION "${CMAKE_PROJECT_VERSION}")
 configure_file(config/AppProps.h.in ${CMAKE_CURRENT_BINARY_DIR}/gen/AppProps.h)
 
