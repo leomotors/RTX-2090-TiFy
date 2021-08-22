@@ -11,7 +11,11 @@
 #include "MyFrame.hpp"
 
 Configurations::Configurations(wxWindow *parent, ImageHandler &ImageHandlerRef)
-    : parent(parent), ImageHandlerRef(ImageHandlerRef)
+    : parent(parent), ImageHandlerRef(ImageHandlerRef),
+      ItemsName(std::vector<std::string>{"Output Video Path", "Output Video Resolution",
+                                         "Output Video FPS", "Output Video Length Per Loop",
+                                         "Number of Loops"}),
+      ItemsGuide(std::vector<std::string>{"", "desc 1", "desc 2", "desc 3", "desc 4"})
 {
     auto init = [](wxListView *toInit) -> void
     {
@@ -42,11 +46,8 @@ Configurations::Configurations(wxWindow *parent, ImageHandler &ImageHandlerRef)
     OutputListView = new wxListView(parent, wxID_ANY, wxDefaultPosition, wxSize(780, 150));
     init(OutputListView);
 
-    OutputListView->InsertItem(0, "Output Video Path");
-    OutputListView->InsertItem(1, "Output Video Resolution");
-    OutputListView->InsertItem(2, "Output Video FPS");
-    OutputListView->InsertItem(3, "Output Video Length Per Loop");
-    OutputListView->InsertItem(4, "Number of Loops");
+    for (int i = 0; i <= 4; i++)
+        OutputListView->InsertItem(i, ItemsName[i]);
 
     OutputListView->Bind(
         wxEVT_LIST_ITEM_SELECTED,
@@ -193,20 +194,29 @@ void Configurations::setWarpPosition(std::vector<std::pair<int, int>> &newWarp)
 
 void Configurations::OnOutputListActivated(int selected)
 {
-    switch (selected)
+    if (selected == 0)
     {
-    case 0:
         ((MyFrame *)parent)->OnSaveFile();
-        break;
-    case 1:
-        break;
-    case 2:
-        break;
-    case 3:
-        break;
-    case 4:
-        break;
-    default:
-        throw "What did you selected???";
+        return;
     }
+
+    if (selected >= ItemsName.size())
+        throw "What did ya just selected!?";
+
+    wxTextEntryDialog ConfigDialog(parent, ItemsGuide[selected],
+                                   "Setting \"" + ItemsName[selected] + "\"");
+
+    if (ConfigDialog.ShowModal() == wxID_OK)
+    {
+        std::string traceback = validateConfig(selected, ConfigDialog.GetValue().ToStdString());
+    }
+    else
+    {
+        std::cout << "Config Settings cancelled by User\n";
+    }
+}
+
+std::string Configurations::validateConfig(int itemID, std::string toValidate)
+{
+    return "";
 }

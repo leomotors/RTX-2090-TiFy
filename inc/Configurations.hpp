@@ -1,5 +1,6 @@
 #pragma once
 
+#include <map>
 #include <string>
 #include <utility>
 #include <vector>
@@ -19,6 +20,9 @@ class Configurations
     friend class RTX2090Ti;
 
   private:
+    std::vector<std::string> ItemsName;
+    std::vector<std::string> ItemsGuide;
+
     std::pair<int, int> Resolution{DEFAULT_OUTVID_RESOLUTION_X, DEFAULT_OUTVID_RESOLUTION_Y};
     int FPS{DEFAULT_FPS};
     double LoopDuration{DEFAULT_LOOP_DURATION};
@@ -34,6 +38,16 @@ class Configurations
 
     int SelectedInputRow{-1};
     int SelectedOutputRow{-1};
+
+    /*
+    ConfigDict ->
+      index: {
+        label,
+        edit_desc,
+        currData,
+        validator,
+      }
+    */
 
   public:
     Configurations(wxWindow *parent, ImageHandler &ImageHandlerRef);
@@ -55,4 +69,6 @@ class Configurations
     void setWarpPosition(std::vector<std::pair<int, int>> &newWarp);
 
     void OnOutputListActivated(int selected);
+
+    std::string validateConfig(int itemID, std::string toValidate);
 };
