@@ -56,7 +56,8 @@ class Configurations
     std::string isRTXReady();
 
   private:
-    void setWarpPosition(std::vector<std::pair<int, int>> &newWarp);
+    void
+    setWarpPosition(std::vector<std::pair<int, int>> newWarp = std::vector<std::pair<int, int>>());
 
     void OnOutputListActivated(int selected);
 

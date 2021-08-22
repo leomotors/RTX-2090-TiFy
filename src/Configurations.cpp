@@ -73,11 +73,7 @@ Configurations::Configurations(wxWindow *parent, ImageHandler &ImageHandlerRef)
                                  -1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED));
                          });
 
-    for (int i = 0; i < DEFAULT_LOOPS_COUNT; i++)
-    {
-        WarpPosition.push_back(
-            {std::rand() % DEFAULT_OUTVID_RESOLUTION_X, std::rand() % DEFAULT_OUTVID_RESOLUTION_Y});
-    }
+    setWarpPosition();
 }
 
 wxListView *Configurations::getInputListView()
@@ -187,11 +183,10 @@ std::string Configurations::isRTXReady()
     return "";
 }
 
-void Configurations::setWarpPosition(std::vector<std::pair<int, int>> &newWarp)
+void Configurations::setWarpPosition(std::vector<std::pair<int, int>> newWarp)
 {
     while (newWarp.size() < nLoops)
-        newWarp.push_back(
-            {std::rand() % DEFAULT_OUTVID_RESOLUTION_X, std::rand() % DEFAULT_OUTVID_RESOLUTION_Y});
+        newWarp.push_back({std::rand() % Resolution.first, std::rand() % Resolution.second});
 
     WarpPosition = newWarp;
 }
@@ -240,6 +235,7 @@ std::string Configurations::validateConfig(int itemID, std::string toValidate)
             return "Height of " + std::to_string(h) + " is too small! Minimum is 144";
 
         Resolution = {w, h};
+        setWarpPosition();
         break;
     }
     case 2:
