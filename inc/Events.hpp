@@ -1,5 +1,7 @@
 #pragma once
 
+#include <wx/wx.h>
+
 enum EventsID
 {
     GITHUB_MENU = 44,
@@ -8,3 +10,8 @@ enum EventsID
     WARPSET_BUTTON = 1337,
     GENERATE_BUTTON = 69420
 };
+
+namespace Events
+{
+static wxCommandEvent dummyEvent;
+}

@@ -5,10 +5,13 @@
 #include <wx/wx.h>
 
 #include "Configurations.hpp"
+#include "Events.hpp"
 #include "ImageHandler.hpp"
 
 class MyFrame : public wxFrame
 {
+    friend class Configurations;
+
   private:
     Configurations ConfigList;
     ImageHandler Image;
@@ -24,7 +27,7 @@ class MyFrame : public wxFrame
     void OnGitHub(wxCommandEvent &event);
 
     void OnOpenFile(wxCommandEvent &event);
-    void OnSaveFile(wxCommandEvent &event);
+    void OnSaveFile(wxCommandEvent &event = Events::dummyEvent);
     void OnAdvanced(wxCommandEvent &event);
     void OnGenerate(wxCommandEvent &event);
 

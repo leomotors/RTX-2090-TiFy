@@ -27,14 +27,22 @@ class Configurations
     std::string OutVideoPath;
 
     wxWindow *parent;
-    wxListView *ListView;
+    wxListView *InputListView;
+    wxListView *OutputListView;
+
     ImageHandler &ImageHandlerRef;
+
+    int SelectedInputRow{-1};
+    int SelectedOutputRow{-1};
 
   public:
     Configurations(wxWindow *parent, ImageHandler &ImageHandlerRef);
-    wxListView *getListView();
+    wxListView *getInputListView();
+    wxListView *getOutputListView();
+
     // * Update List with Current Data
-    void updateList();
+    void updateInputList();
+    void updateOutputList();
     void setOutputPath(std::string &outputPath);
 
     std::string getPositionsAsString();
@@ -45,4 +53,6 @@ class Configurations
 
   private:
     void setWarpPosition(std::vector<std::pair<int, int>> &newWarp);
+
+    void OnOutputListActivated(int selected);
 };

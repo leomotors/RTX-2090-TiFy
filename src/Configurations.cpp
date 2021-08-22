@@ -8,21 +8,65 @@
 #include <wx/listctrl.h>
 #include <wx/wx.h>
 
+#include "MyFrame.hpp"
+
 Configurations::Configurations(wxWindow *parent, ImageHandler &ImageHandlerRef)
     : parent(parent), ImageHandlerRef(ImageHandlerRef)
 {
-    ListView = new wxListView(parent, wxID_ANY, wxDefaultPosition, wxSize(780, 300));
+    auto init = [](wxListView *toInit) -> void
+    {
+        toInit->InsertColumn(0, "Properties", wxLIST_FORMAT_CENTER, 250);
+        toInit->InsertColumn(1, "Value", wxLIST_FORMAT_CENTER, 530);
+    };
 
-    ListView->InsertColumn(0, "Properties", wxLIST_FORMAT_CENTER, 250);
-    ListView->InsertColumn(1, "Value", wxLIST_FORMAT_CENTER, 530);
-    ListView->InsertItem(0, "Input Image Path");
-    ListView->InsertItem(1, "Input Image Resolution");
-    ListView->InsertItem(2, wxEmptyString);
-    ListView->InsertItem(3, "Output Video Path");
-    ListView->InsertItem(4, "Output Video Resolution");
-    ListView->InsertItem(5, "Output Video FPS");
-    ListView->InsertItem(6, "Output Video Length Per Loop");
-    ListView->InsertItem(7, "Number of Loops");
+    InputListView = new wxListView(parent, wxID_ANY, wxDefaultPosition, wxSize(780, 75));
+    init(InputListView);
+
+    InputListView->InsertItem(0, "Input Image Path");
+    InputListView->InsertItem(1, "Input Image Resolution");
+
+    InputListView->Bind(
+        wxEVT_LIST_ITEM_SELECTED,
+        [this](wxListEvent &event)
+        {
+            int selected =
+                this->InputListView->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+            if (SelectedOutputRow != -1)
+            {
+                this->OutputListView->SetItemState(SelectedOutputRow, 0, wxLIST_STATE_SELECTED);
+                SelectedOutputRow = -1;
+            }
+            SelectedInputRow = selected;
+        });
+
+    OutputListView = new wxListView(parent, wxID_ANY, wxDefaultPosition, wxSize(780, 150));
+    init(OutputListView);
+
+    OutputListView->InsertItem(0, "Output Video Path");
+    OutputListView->InsertItem(1, "Output Video Resolution");
+    OutputListView->InsertItem(2, "Output Video FPS");
+    OutputListView->InsertItem(3, "Output Video Length Per Loop");
+    OutputListView->InsertItem(4, "Number of Loops");
+
+    OutputListView->Bind(
+        wxEVT_LIST_ITEM_SELECTED,
+        [this](wxListEvent &event)
+        {
+            int selected =
+                this->OutputListView->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+            if (SelectedInputRow != -1)
+            {
+                this->InputListView->SetItemState(SelectedInputRow, 0, wxLIST_STATE_SELECTED);
+                SelectedInputRow = -1;
+            }
+            SelectedOutputRow = selected;
+        });
+    OutputListView->Bind(wxEVT_LIST_ITEM_ACTIVATED,
+                         [this](wxListEvent &event)
+                         {
+                             this->OnOutputListActivated(this->OutputListView->GetNextItem(
+                                 -1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED));
+                         });
 
     for (int i = 0; i < DEFAULT_LOOPS_COUNT; i++)
     {
@@ -31,22 +75,32 @@ Configurations::Configurations(wxWindow *parent, ImageHandler &ImageHandlerRef)
     }
 }
 
-wxListView *Configurations::getListView()
+wxListView *Configurations::getInputListView()
 {
-    updateList();
-    return ListView;
+    updateInputList();
+    return InputListView;
 }
 
-void Configurations::updateList()
+wxListView *Configurations::getOutputListView()
 {
-    ListView->SetItem(0, 1, ImageHandlerRef.getImagePath());
-    ListView->SetItem(1, 1, ImageHandlerRef.getImageResStr());
+    updateOutputList();
+    return OutputListView;
+}
 
-    ListView->SetItem(4, 1,
-                      std::to_string(Resolution.first) + "x" + std::to_string(Resolution.second));
-    ListView->SetItem(5, 1, std::to_string(FPS));
-    ListView->SetItem(6, 1, std::to_string(LoopDuration));
-    ListView->SetItem(7, 1, std::to_string(nLoops));
+void Configurations::updateInputList()
+{
+    InputListView->SetItem(0, 1, ImageHandlerRef.getImagePath());
+    InputListView->SetItem(1, 1, ImageHandlerRef.getImageResStr());
+}
+
+void Configurations::updateOutputList()
+{
+    OutputListView->SetItem(0, 1, OutVideoPath.empty() ? "" : OutVideoPath + ".mp4");
+    OutputListView->SetItem(
+        1, 1, std::to_string(Resolution.first) + "x" + std::to_string(Resolution.second));
+    OutputListView->SetItem(2, 1, std::to_string(FPS));
+    OutputListView->SetItem(3, 1, std::to_string(LoopDuration));
+    OutputListView->SetItem(4, 1, std::to_string(nLoops));
 }
 
 void Configurations::setOutputPath(std::string &outputPath)
@@ -56,7 +110,7 @@ void Configurations::setOutputPath(std::string &outputPath)
 
     OutVideoPath = outputPath.substr(0, outputPath.size() - 4);
 
-    ListView->SetItem(3, 1, OutVideoPath + ".mp4");
+    updateOutputList();
 }
 
 std::string Configurations::getPositionsAsString()
@@ -135,4 +189,24 @@ void Configurations::setWarpPosition(std::vector<std::pair<int, int>> &newWarp)
             {std::rand() % DEFAULT_OUTVID_RESOLUTION_X, std::rand() % DEFAULT_OUTVID_RESOLUTION_Y});
 
     WarpPosition = newWarp;
+}
+
+void Configurations::OnOutputListActivated(int selected)
+{
+    switch (selected)
+    {
+    case 0:
+        ((MyFrame *)parent)->OnSaveFile();
+        break;
+    case 1:
+        break;
+    case 2:
+        break;
+    case 3:
+        break;
+    case 4:
+        break;
+    default:
+        throw "What did you selected???";
+    }
 }

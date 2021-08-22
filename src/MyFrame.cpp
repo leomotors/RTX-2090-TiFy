@@ -38,8 +38,12 @@ MyFrame::MyFrame(const wxString &title, const wxPoint &pos, const wxSize &size)
     mainColumn->Add(FileInputRow, 0, wxCENTER | wxLEFT | wxRIGHT | wxUP, 10);
 
     // * Sub-Row: Configuration List
-    mainColumn->Add(new wxStaticText(this, wxID_ANY, "Your Configurations:"), 0, wxLEFT | wxUP, 10);
-    mainColumn->Add(ConfigList.getListView(), 4, wxEXPAND | wxALL, 10);
+    mainColumn->Add(new wxStaticText(this, wxID_ANY, "  Input Image Informations: "), 0,
+                    wxLEFT | wxUP, 10);
+    mainColumn->Add(ConfigList.getInputListView(), 2, wxEXPAND | wxALL, 10);
+    mainColumn->Add(new wxStaticText(this, wxID_ANY, "  Your Output Video Configurations: "), 0,
+                    wxLEFT | wxUP, 10);
+    mainColumn->Add(ConfigList.getOutputListView(), 4, wxEXPAND | wxALL, 10);
 
     // * Sub-Row: Action Buttons
     wxBoxSizer *buttonBar = new wxBoxSizer(wxHORIZONTAL);
@@ -77,7 +81,7 @@ void MyFrame::OnGitHub(wxCommandEvent &event)
 void MyFrame::OnOpenFile(wxCommandEvent &event)
 {
     wxFileDialog openFileDialog(this, "Open Image file", ".", "",
-                                "Image Files (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png",
+                                "Image Files (*.jpg *.jpeg *.png)|*.jpg;*.jpeg;*.png",
                                 wxFD_OPEN | wxFD_FILE_MUST_EXIST);
 
     if (openFileDialog.ShowModal() == wxID_CANCEL)
@@ -91,7 +95,7 @@ void MyFrame::OnOpenFile(wxCommandEvent &event)
     std::cout << "Opening File at " << tmpFilePath << "\n";
     Image.loadFile(tmpFilePath);
 
-    ConfigList.updateList();
+    ConfigList.updateInputList();
 }
 
 void MyFrame::OnSaveFile(wxCommandEvent &event)
@@ -115,7 +119,7 @@ void MyFrame::OnSaveFile(wxCommandEvent &event)
 
 void MyFrame::OnAdvanced(wxCommandEvent &event)
 {
-    const char *tmpMsg{"These are the warp positions that will style your video.\nIf one is set "
+    const char *tmpMsg{"These are the warp positions that will style your video. If one is set "
                        "empty, it will be randomly generated again."};
     wxTextEntryDialog WarpSetDialog(this, tmpMsg, "Warp Points Settings",
                                     ConfigList.getPositionsAsString(), wxTextEntryDialogStyle,

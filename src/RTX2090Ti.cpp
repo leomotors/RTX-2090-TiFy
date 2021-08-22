@@ -94,11 +94,11 @@ bool RTX2090Ti::buildVideo()
     std::chrono::duration<double> time_took = end - start;
     std::cout << "Building Video took " << time_took.count() << " secs.\n";
 
-    wxMessageDialog doneMessage(
-        parent,
-        "Build Success! Took " + std::to_string(time_took.count()) +
-            " seconds.\nYour Video is Ready, would you like to open default exports directory?",
-        "Build Success", wxOK | wxCANCEL);
+    wxMessageDialog doneMessage(parent,
+                                "Build Success! Took " + std::to_string(time_took.count()) +
+                                    " seconds.\nYour Video is Ready, would you like to open the "
+                                    "app directory in file explorer?",
+                                "Build Success", wxOK | wxCANCEL);
 
     if (doneMessage.ShowModal() == wxID_OK)
     {
