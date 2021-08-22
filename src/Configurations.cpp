@@ -15,7 +15,9 @@ Configurations::Configurations(wxWindow *parent, ImageHandler &ImageHandlerRef)
       ItemsName(std::vector<std::string>{"Output Video Path", "Output Video Resolution",
                                          "Output Video FPS", "Output Video Length Per Loop",
                                          "Number of Loops"}),
-      ItemsGuide(std::vector<std::string>{"", "desc 1", "desc 2", "desc 3", "desc 4"})
+      ItemsGuide(std::vector<std::string>{"", "Resolution of Output Video\nExample: 480x480",
+                                          "FPS of Output Video", "Length of each Loop in the Video",
+                                          "Number of Loops in the Video"})
 {
     auto init = [](wxListView *toInit) -> void
     {
@@ -23,6 +25,7 @@ Configurations::Configurations(wxWindow *parent, ImageHandler &ImageHandlerRef)
         toInit->InsertColumn(1, "Value", wxLIST_FORMAT_CENTER, 530);
     };
 
+    // * Input Part Listview
     InputListView = new wxListView(parent, wxID_ANY, wxDefaultPosition, wxSize(780, 75));
     init(InputListView);
 
@@ -43,10 +46,11 @@ Configurations::Configurations(wxWindow *parent, ImageHandler &ImageHandlerRef)
             SelectedInputRow = selected;
         });
 
+    // * Output Part Listview (Configable)
     OutputListView = new wxListView(parent, wxID_ANY, wxDefaultPosition, wxSize(780, 150));
     init(OutputListView);
 
-    for (int i = 0; i <= 4; i++)
+    for (int i = 0; i < ItemsName.size(); i++)
         OutputListView->InsertItem(i, ItemsName[i]);
 
     OutputListView->Bind(
@@ -124,9 +128,9 @@ std::string Configurations::getPositionsAsString()
     return result_str;
 }
 
-std::string Configurations::validateWarp(std::string ToValidate)
+std::string Configurations::validateWarp(std::string toValidate)
 {
-    std::stringstream ss(ToValidate);
+    std::stringstream ss(toValidate);
 
     std::vector<std::string> word_arr;
     std::string tmp;
@@ -209,6 +213,11 @@ void Configurations::OnOutputListActivated(int selected)
     if (ConfigDialog.ShowModal() == wxID_OK)
     {
         std::string traceback = validateConfig(selected, ConfigDialog.GetValue().ToStdString());
+        if (!traceback.empty())
+            wxMessageBox(traceback, "Validation Failed: Value not set", wxOK | wxICON_ERROR);
+
+        std::cout << "Config #" << selected << " Success\n";
+        updateOutputList();
     }
     else
     {
@@ -218,5 +227,58 @@ void Configurations::OnOutputListActivated(int selected)
 
 std::string Configurations::validateConfig(int itemID, std::string toValidate)
 {
+    switch (itemID)
+    {
+    case 1:
+    {
+        int w{0}, h{0};
+        sscanf(toValidate.c_str(), "%dx%d", &w, &h);
+
+        if (w < 144)
+            return "Width of " + std::to_string(w) + " is too small! Minimum is 144";
+        if (h < 144)
+            return "Height of " + std::to_string(h) + " is too small! Minimum is 144";
+
+        Resolution = {w, h};
+        break;
+    }
+    case 2:
+    {
+        int fps{0};
+        sscanf(toValidate.c_str(), "%d", &fps);
+
+        if (fps < 1)
+            return "FPS of " + std::to_string(fps) + " is too Small";
+
+        FPS = fps;
+        break;
+    }
+    case 3:
+    {
+        double vidlen{0.0};
+        sscanf(toValidate.c_str(), "%lf", &vidlen);
+
+        if (vidlen < 1.0)
+            return "Video Length Per Loop of " + std::to_string(vidlen) +
+                   " is too Small. Minimum is 1 second";
+
+        LoopDuration = vidlen;
+        break;
+    }
+    case 4:
+    {
+        int nLoopsNew{0};
+        sscanf(toValidate.c_str(), "%d", &nLoopsNew);
+
+        if (nLoopsNew < 1)
+            return "Number of Loops of " + std::to_string(nLoopsNew) +
+                   " will make video not exist!";
+
+        nLoops = nLoopsNew;
+        break;
+    }
+    default:
+        throw "Some Member Function or Friend Class is SUS";
+    }
     return "";
 }

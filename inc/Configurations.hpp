@@ -39,16 +39,6 @@ class Configurations
     int SelectedInputRow{-1};
     int SelectedOutputRow{-1};
 
-    /*
-    ConfigDict ->
-      index: {
-        label,
-        edit_desc,
-        currData,
-        validator,
-      }
-    */
-
   public:
     Configurations(wxWindow *parent, ImageHandler &ImageHandlerRef);
     wxListView *getInputListView();
@@ -61,7 +51,7 @@ class Configurations
 
     std::string getPositionsAsString();
     // * Validate and If Pass, Set it. Return empty string if pass, else traceback
-    std::string validateWarp(std::string ToValidate);
+    std::string validateWarp(std::string toValidate);
     // * Returns Empty String if is Ready, otherwise return error message
     std::string isRTXReady();
 
