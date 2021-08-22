@@ -210,8 +210,9 @@ void Configurations::OnOutputListActivated(int selected)
         std::string traceback = validateConfig(selected, ConfigDialog.GetValue().ToStdString());
         if (!traceback.empty())
             wxMessageBox(traceback, "Validation Failed: Value not set", wxOK | wxICON_ERROR);
+        else
+            std::cout << "Config #" << selected << " Success\n";
 
-        std::cout << "Config #" << selected << " Success\n";
         updateOutputList();
     }
     else

@@ -21,8 +21,8 @@ void Video::linkAudio(std::string fileName, double videoLength)
             subconcat += RTX_MUSIC;
         }
 
-        std::string concatCMD = "ffmpeg -i ";
-        concatCMD += "\"concat:" + subconcat + "\" -acodec copy ./temp/RTXLONG.mp3";
+        std::string concatCMD = "ffmpeg -y -i ";
+        concatCMD += "\"concat:" + subconcat + "\" -c:a copy -codec copy ./temp/RTXLONG.mp3";
 
         std::cout << "Executing: " << concatCMD << "\n";
         std::system(concatCMD.c_str());
