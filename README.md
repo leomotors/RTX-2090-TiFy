@@ -8,11 +8,11 @@ Also, My First GUI Program on C++
 
 ## Reference
 
-![LTT Loop](https://tenor.com/view/linus-linus-tech-tips-ltt-lttstore-youtube-gif-19356047.gif)
+[Linus Tech Tips Loop (YouTube)](https://www.youtube.com/watch?v=Xx59T5n4ZLo)
 
 ## My Implementation
 
-**WORK IN PROGRESS**
+**WORK IN PROGRESS** Visit Latest Preview Build [Here](https://github.com/Leomotors/RTX-2090-TiFy/releases)
 
 ## 🌿 Dependencies
 
@@ -29,3 +29,4 @@ Also, My First GUI Program on C++
   - Ubuntu 20.04 on Windows Linux Subsystem (Kernel 5.10.43.3 with WSLg 1.0.26)
   - Windows 11 Build 22000
   - gcc 9.3.0
+  - wxWidgets Built with GTK 3
