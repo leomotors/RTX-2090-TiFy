@@ -4,18 +4,25 @@ set(APP_VERSION "${CMAKE_PROJECT_VERSION}")
 configure_file(config/AppProps.h.in ${CMAKE_CURRENT_BINARY_DIR}/gen/AppProps.h)
 
 # Find Required Package
-find_package(wxWidgets REQUIRED COMPONENTS net core base)
+find_package(wxWidgets REQUIRED)
 include(${wxWidgets_USE_FILE})
 
 find_package(OpenCV REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
 
-# Compiling
+# Source Files
 file(GLOB APP_SRCFILE "src/*.cpp")
 
+# Compiling
+if(WIN32)
+add_executable(RTX2090TiFy WIN32 
+    ${APP_SRCFILE}
+)
+else()
 add_executable(RTX2090TiFy 
     ${APP_SRCFILE}
 )
+endif()
 
 include_directories(inc)
 
@@ -29,19 +36,14 @@ set_property(TARGET RTX2090TiFy PROPERTY CXX_STANDARD 20)
 
 # Add Warning Flags
 if(MSVC)
-    add_compile_options(/Wall)
+    target_compile_options(RTX2090TiFy PRIVATE /W4)
 else()
     set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wno-unused-result -Wno-unused-parameter -Wno-sign-compare -Wno-reorder -O3")
 endif()
 
-# Moving Executable to Project Root (! Maybe changed)
+# Moving Executable to Project Root (! TO BE changed)
 if(WIN32)
-    if(MSVC)
-    add_custom_command(TARGET RTX2090TiFy POST_BUILD
-        COMMAND move Release\\RTX2090TiFy.exe ..
-        COMMENT "Moving Executable to Project Root..."
-    )
-    else()
+    if(NOT MSVC)
     add_custom_command(TARGET RTX2090TiFy POST_BUILD
         COMMAND move RTX2090TiFy.exe ..
         COMMENT "Moving Executable to Project Root..."

@@ -21,12 +21,12 @@ Also, My First GUI Program on C++
 - [FFmpeg (Command Line)](https://github.com/FFmpeg/FFmpeg)
 - Compiler: Require C++20 and #pragma once (should exist everywhere?)
 
-## ⚙️ Compatibility
+## ⚙️ My Compatibility Test Result
 
-- Windows ❓
-  - If you can build it should work, good luck doing so. I tried alot to make it work in Windows and I can't. F
-- Linux ✔️
-  - Ubuntu 20.04 on Windows Linux Subsystem (Kernel 5.10.43.3 with WSLg 1.0.26)
+- Windows ⚠️
   - Windows 11 Build 22000
+  - MSVC 19.29.30133.0 on Visual Studio 2019 (16.11.1)
+- Linux ✔️
+  - Ubuntu 20.04 on Windows Linux Subsystem (Kernel 5.10.43.3 with WSLg 1.0.26) on Windows 11 Build 22000
   - gcc 9.3.0
   - wxWidgets Built with GTK 3
