@@ -55,7 +55,7 @@ if(WIN32)
     else()
         # For MSVC, Please use Visual Studio and Target x64-Release
         add_custom_command(TARGET ${EXECUTABLE_NAME} POST_BUILD
-            COMMAND ${PROJECT_SOURCE_DIR}\\packapp.bat ${PROJECT_SOURCE_DIR} ${APP_VERSION}
+            COMMAND ${PROJECT_SOURCE_DIR}\\scripts\\packapp.bat ${PROJECT_SOURCE_DIR} ${APP_VERSION}
             COMMENT "Packing app with packapp.bat"
         )
     endif()
