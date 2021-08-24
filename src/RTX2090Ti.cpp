@@ -69,10 +69,10 @@ bool RTX2090Ti::buildVideo()
             double expansionRate = (double)f / totalFrames;
             expansionRate = std::pow(expansionRate, 2.75);
 
-            std::pair<int, int> LocalStart{Start.first - left * expansionRate,
-                                           Start.second - up * expansionRate};
-            std::pair<int, int> LocalEnd{End.first + right * expansionRate,
-                                         End.second + down * expansionRate};
+            std::pair<int, int> LocalStart{Start.first - std::round(left * expansionRate),
+                                           Start.second - std::round(up * expansionRate)};
+            std::pair<int, int> LocalEnd{End.first + std::round(right * expansionRate),
+                                         End.second + std::round(down * expansionRate)};
 
             RayTracing(OutVideo, LocalStart, LocalEnd, point);
 
@@ -114,8 +114,10 @@ void RTX2090Ti::RayTracing(cv::VideoWriter &OutVideo, std::pair<int, int> &Start
 {
     if ((End.first - Start.first) / cols > 0.2 * cols)
     {
-        cv::Mat cropped_img = BaseImage(cv::Range(Start.second / rows, End.second / rows),
-                                        cv::Range(Start.first / cols, End.first / cols));
+        cv::Mat cropped_img = BaseImage(cv::Range(std::round(Start.second / (double)rows),
+                                                  std::round(End.second / (double)rows)),
+                                        cv::Range(std::round(Start.first / (double)cols),
+                                                  std::round(End.first / (double)cols)));
 
         cv::resize(cropped_img, cropped_img, cv::Size(cols, rows));
         OutVideo.write(cropped_img);
@@ -132,7 +134,8 @@ void RTX2090Ti::RayTracing(cv::VideoWriter &OutVideo, std::pair<int, int> &Start
     std::pair<int, int> BigTileEnd{std::ceil((double)End.first / cols),
                                    std::ceil((double)End.second / rows)};
 
-    std::pair<int, int> PixelSize{cols * cols / Imsize.first + 1, rows * rows / Imsize.second + 1};
+    std::pair<int, int> PixelSize{std::round((double)cols * cols / Imsize.first) + 1,
+                                  std::round((double)rows * rows / Imsize.second) + 1};
 
     cv::Mat SmolImage;
     cv::resize(BaseImageGray, SmolImage, cv::Size(PixelSize.first, PixelSize.second));
