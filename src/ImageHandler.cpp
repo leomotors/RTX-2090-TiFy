@@ -4,7 +4,7 @@
 #include <string>
 #include <utility>
 
-ImageHandler::ImageHandler() {}
+ImageHandler::ImageHandler() : status(false) {}
 
 bool ImageHandler::loadFile(std::string &filename)
 {
@@ -13,7 +13,8 @@ bool ImageHandler::loadFile(std::string &filename)
     ImageGray = cv::imread(filename, cv::IMREAD_GRAYSCALE);
     ImgRes.first = Image.cols;
     ImgRes.second = Image.rows;
-    return true;
+    status = ImgRes.first > 0 && ImgRes.second > 0;
+    return status;
 }
 
 std::pair<int, int> ImageHandler::getImageRes()

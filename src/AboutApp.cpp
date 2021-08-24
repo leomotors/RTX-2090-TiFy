@@ -13,6 +13,6 @@ std::string App::aboutAppLong()
 {
     std::string AboutApp = "Turns you into RTX 2090 Ti\nApp Version: ";
     AboutApp += APP_VERSION;
-    AboutApp += "\nCreated by Leomotors";
+    AboutApp += "\nCreated by Leomotors\nUsing wxWidgets & OpenCV";
     return AboutApp;
 }

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(RTX-2090-TiFy VERSION 1.0.52.130)
+project(RTX-2090-TiFy VERSION 1.0.52.139)
 set(APP_VERSION "${CMAKE_PROJECT_VERSION}")
 configure_file(config/AppProps.h.in ${CMAKE_CURRENT_BINARY_DIR}/gen/AppProps.h)
 
@@ -15,13 +15,13 @@ file(GLOB APP_SRCFILE "src/*.cpp")
 
 # Compiling
 if(WIN32)
-add_executable(RTX2090TiFy WIN32 
-    ${APP_SRCFILE}
-)
+    add_executable(RTX2090TiFy WIN32 
+        ${APP_SRCFILE}
+    )
 else()
-add_executable(RTX2090TiFy 
-    ${APP_SRCFILE}
-)
+    add_executable(RTX2090TiFy 
+        ${APP_SRCFILE}
+    )
 endif()
 
 include_directories(config)
@@ -45,16 +45,17 @@ endif()
 # Moving Executable to Project Root (! TO BE changed)
 if(WIN32)
     if(NOT MSVC)
-    # For Windows with MinGW
-    add_custom_command(TARGET RTX2090TiFy POST_BUILD
-        COMMAND move RTX2090TiFy.exe ..
-        COMMENT "Moving Executable to Project Root..."
-    )
+        # For Windows with MinGW
+        add_custom_command(TARGET RTX2090TiFy POST_BUILD
+            COMMAND move RTX2090TiFy.exe ..
+            COMMENT "Moving Executable to Project Root..."
+        )
+    # If you using MSVC, please build using Visual Studio (One Method I've done and works)
     endif()
 else()
-# For Linux
-add_custom_command(TARGET RTX2090TiFy POST_BUILD
-    COMMAND mv RTX2090TiFy ..
-    COMMENT "Moving Executable to Project Root..."
+    # For Linux
+    add_custom_command(TARGET RTX2090TiFy POST_BUILD
+        COMMAND mv RTX2090TiFy ..
+        COMMENT "Moving Executable to Project Root..."
 )
 endif()

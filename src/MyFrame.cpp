@@ -48,11 +48,9 @@ MyFrame::MyFrame(const wxString &title, const wxPoint &pos, const wxSize &size)
     // * Sub-Row: Action Buttons
     wxBoxSizer *buttonBar = new wxBoxSizer(wxHORIZONTAL);
     buttonBar->Add(new wxButton(this, WARPSET_BUTTON, "Set Warp Points (Advanced)"), 0,
-                   wxSTRETCH_NOT | wxALIGN_LEFT, 30);
-    buttonBar->Add(new wxButton(this, LMAO_BUTTON, "Use GPU Acceleration"), 0,
-                   wxSTRETCH_NOT | wxALIGN_RIGHT, 30);
-    buttonBar->Add(new wxButton(this, GENERATE_BUTTON, "Generate!"), 0,
-                   wxSTRETCH_NOT | wxALIGN_RIGHT, 30);
+                   wxSTRETCH_NOT, 30);
+    buttonBar->Add(new wxButton(this, LMAO_BUTTON, "Use GPU Acceleration"), 0, wxSTRETCH_NOT, 30);
+    buttonBar->Add(new wxButton(this, GENERATE_BUTTON, "Generate!"), 0, wxSTRETCH_NOT, 30);
 
     mainColumn->Add(buttonBar, 0, wxEXPAND | wxALL, 5);
 
@@ -95,7 +93,13 @@ void MyFrame::OnOpenFile(wxCommandEvent &event)
     std::string tmpFilePath = openFileDialog.GetPath().mb_str(wxConvUTF8).data();
 
     std::cout << "Opening File at " << tmpFilePath << "\n";
-    Image.loadFile(tmpFilePath);
+
+    if (!Image.loadFile(tmpFilePath))
+    {
+        std::cout << "Error Opening File\n";
+        wxMessageBox("There is some issue and image wasn't open properly", "Error Opening File",
+                     wxOK | wxICON_ERROR);
+    }
 
     ConfigList.updateInputList();
 }

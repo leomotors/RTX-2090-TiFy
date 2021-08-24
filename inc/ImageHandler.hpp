@@ -13,6 +13,9 @@ class ImageHandler
     std::pair<int, int> ImgRes;
 
   public:
+    bool status;
+
+  public:
     ImageHandler();
     bool loadFile(std::string &filename);
     std::pair<int, int> getImageRes();

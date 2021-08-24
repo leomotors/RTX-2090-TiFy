@@ -8,6 +8,7 @@
 #include <wx/listctrl.h>
 #include <wx/wx.h>
 
+#include "ImageHandler.hpp"
 #include "MyFrame.hpp"
 
 Configurations::Configurations(wxWindow *parent, ImageHandler &ImageHandlerRef)
@@ -170,14 +171,14 @@ std::string Configurations::validateWarp(std::string toValidate)
 
 std::string Configurations::isRTXReady()
 {
-    if (ImageHandlerRef.getImagePath().empty())
+    if (ImageHandlerRef.getImagePath().empty() || !ImageHandlerRef.status)
     {
-        return "Input Path is Empty";
+        return "Input Path is not set or Image isn't loaded properly";
     }
 
     if (OutVideoPath.empty())
     {
-        return "Output Path is Empty";
+        return "Output Path is not set";
     }
 
     return "";
