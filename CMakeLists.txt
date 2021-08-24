@@ -3,6 +3,8 @@ project(RTX-2090-TiFy VERSION 1.0.52.139)
 set(APP_VERSION "${CMAKE_PROJECT_VERSION}")
 configure_file(config/AppProps.h.in ${CMAKE_CURRENT_BINARY_DIR}/gen/AppProps.h)
 
+set(EXECUTABLE_NAME "RTX2090TiFy")
+
 # Find Required Package
 find_package(wxWidgets REQUIRED)
 include(${wxWidgets_USE_FILE})
@@ -15,11 +17,11 @@ file(GLOB APP_SRCFILE "src/*.cpp")
 
 # Compiling
 if(WIN32)
-    add_executable(RTX2090TiFy WIN32 
+    add_executable(${EXECUTABLE_NAME} WIN32 
         ${APP_SRCFILE}
     )
 else()
-    add_executable(RTX2090TiFy 
+    add_executable(${EXECUTABLE_NAME} 
         ${APP_SRCFILE}
     )
 endif()
@@ -28,34 +30,39 @@ include_directories(config)
 include_directories(inc)
 
 # Link Libraries
-target_link_libraries(RTX2090TiFy ${wxWidgets_LIBRARIES})
-target_link_libraries(RTX2090TiFy ${OpenCV_LIBS})
-target_include_directories(RTX2090TiFy PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/gen)
+target_link_libraries(${EXECUTABLE_NAME} ${wxWidgets_LIBRARIES})
+target_link_libraries(${EXECUTABLE_NAME} ${OpenCV_LIBS})
+target_include_directories(${EXECUTABLE_NAME} PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/gen)
 
 # C++20
-set_property(TARGET RTX2090TiFy PROPERTY CXX_STANDARD 20)
+set_property(TARGET ${EXECUTABLE_NAME} PROPERTY CXX_STANDARD 20)
 
 # Add Warning Flags
 if(MSVC)
-    target_compile_options(RTX2090TiFy PRIVATE /W4)
+    target_compile_options(${EXECUTABLE_NAME} PRIVATE /W4)
 else()
     set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wno-unused-result -Wno-unused-parameter -Wno-sign-compare -Wno-reorder -O3")
 endif()
 
-# Moving Executable to Project Root (! TO BE changed)
+# Making App Ready
 if(WIN32)
     if(NOT MSVC)
         # For Windows with MinGW
-        add_custom_command(TARGET RTX2090TiFy POST_BUILD
-            COMMAND move RTX2090TiFy.exe ..
+        add_custom_command(TARGET ${EXECUTABLE_NAME} POST_BUILD
+            COMMAND move ${EXECUTABLE_NAME}.exe ..
             COMMENT "Moving Executable to Project Root..."
         )
-    # If you using MSVC, please build using Visual Studio (One Method I've done and works)
+    else()
+        # For MSVC, Please use Visual Studio and Target x64-Release
+        add_custom_command(TARGET ${EXECUTABLE_NAME} POST_BUILD
+            COMMAND ${PROJECT_SOURCE_DIR}\\packapp.bat ${PROJECT_SOURCE_DIR} ${APP_VERSION}
+            COMMENT "Packing app with packapp.bat"
+        )
     endif()
 else()
     # For Linux
-    add_custom_command(TARGET RTX2090TiFy POST_BUILD
-        COMMAND mv RTX2090TiFy ..
+    add_custom_command(TARGET ${EXECUTABLE_NAME} POST_BUILD
+        COMMAND mv ${EXECUTABLE_NAME} ..
         COMMENT "Moving Executable to Project Root..."
 )
 endif()

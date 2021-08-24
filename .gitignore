@@ -32,17 +32,18 @@
 *.app
 
 # Build
-
 build
 
 # Executable
-
 RTX2090TiFy
 
-# VSCode
-
+# VS & VSCode
+.vs
 .vscode
 
 # Exports
 *.avi
 *.mp4
+
+# MS Visual Studio
+CMakeSettings.json
