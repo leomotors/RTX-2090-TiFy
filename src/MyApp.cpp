@@ -13,7 +13,7 @@ bool MyApp::OnInit()
     std::srand(std::time(nullptr));
 
     MyFrame *frame = new MyFrame(App::aboutAppSimple(), wxPoint(DEFAULT_POS), wxSize(800, 600));
-    frame->SetIcon(wxIcon("assets/linus256.jpg"));
+    frame->SetIcon(wxIcon(APP_LOGO));
     frame->Show(true);
     return true;
 }

@@ -14,5 +14,6 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_BUTTON(SAVE_FILE_BUTTON, MyFrame::OnSaveFile)
     EVT_BUTTON(WARPSET_BUTTON, MyFrame::OnAdvanced)
     EVT_BUTTON(GENERATE_BUTTON, MyFrame::OnGenerate)
+    EVT_BUTTON(LMAO_BUTTON, MyFrame::OnRickRoll)
 wxEND_EVENT_TABLE();
 // clang-format on

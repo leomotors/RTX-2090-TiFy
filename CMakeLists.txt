@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(RTX-2090-TiFy VERSION 1.0.52.122)
+project(RTX-2090-TiFy VERSION 1.0.52.130)
 set(APP_VERSION "${CMAKE_PROJECT_VERSION}")
 configure_file(config/AppProps.h.in ${CMAKE_CURRENT_BINARY_DIR}/gen/AppProps.h)
 
@@ -45,12 +45,14 @@ endif()
 # Moving Executable to Project Root (! TO BE changed)
 if(WIN32)
     if(NOT MSVC)
+    # For Windows with MinGW
     add_custom_command(TARGET RTX2090TiFy POST_BUILD
         COMMAND move RTX2090TiFy.exe ..
         COMMENT "Moving Executable to Project Root..."
     )
     endif()
 else()
+# For Linux
 add_custom_command(TARGET RTX2090TiFy POST_BUILD
     COMMAND mv RTX2090TiFy ..
     COMMENT "Moving Executable to Project Root..."

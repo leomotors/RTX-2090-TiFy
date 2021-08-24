@@ -49,6 +49,8 @@ MyFrame::MyFrame(const wxString &title, const wxPoint &pos, const wxSize &size)
     wxBoxSizer *buttonBar = new wxBoxSizer(wxHORIZONTAL);
     buttonBar->Add(new wxButton(this, WARPSET_BUTTON, "Set Warp Points (Advanced)"), 0,
                    wxSTRETCH_NOT | wxALIGN_LEFT, 30);
+    buttonBar->Add(new wxButton(this, LMAO_BUTTON, "Use GPU Acceleration"), 0,
+                   wxSTRETCH_NOT | wxALIGN_RIGHT, 30);
     buttonBar->Add(new wxButton(this, GENERATE_BUTTON, "Generate!"), 0,
                    wxSTRETCH_NOT | wxALIGN_RIGHT, 30);
 
@@ -151,4 +153,10 @@ void MyFrame::OnGenerate(wxCommandEvent &event)
     }
 
     return;
+}
+
+void MyFrame::OnRickRoll(wxCommandEvent &event)
+{
+    std::cout << "User is getting Rick Rolled (*/ω＼*)\n";
+    wxLaunchDefaultBrowser(RICKROLL_URL);
 }
