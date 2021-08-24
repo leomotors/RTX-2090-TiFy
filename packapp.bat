@@ -17,6 +17,7 @@ copy *.exe %dist_name%
 copy *.dll %dist_name%
 copy *.ilk %dist_name%
 copy *.pdb %dist_name%
+copy %project_root_dir%\lib\*.dll %dist_name%
 
 echo PACKING COMPLETED, Openning File Explorer...
 explorer.exe .

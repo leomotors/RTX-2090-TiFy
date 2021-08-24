@@ -38,6 +38,7 @@ Linux: Currently, Only Build from Source is available.
   - Windows 11 Build 22000
   - MSVC 19.29.30133.0 on Visual Studio 2019 (16.11.1)
   - wxWidgets from vcpkg
+  - **Note**: OpenCV dll must be included in `lib` folder
 - Linux ✔️
   - Ubuntu 20.04 on Windows Linux Subsystem (Kernel 5.10.43.3 with WSLg 1.0.26) on Windows 11 Build 22000
   - gcc 9.3.0
