@@ -1,0 +1,5 @@
+# Special Config that overwrite default AT COMPILE TIME
+
+SPECIAL_CONFIG.h
+
+# DEFAULT_POS => Position to launch the app

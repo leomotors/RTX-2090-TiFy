@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(RTX-2090-TiFy VERSION 1.0.52.120)
+project(RTX-2090-TiFy VERSION 1.0.52.122)
 set(APP_VERSION "${CMAKE_PROJECT_VERSION}")
 configure_file(config/AppProps.h.in ${CMAKE_CURRENT_BINARY_DIR}/gen/AppProps.h)
 
@@ -24,6 +24,7 @@ add_executable(RTX2090TiFy
 )
 endif()
 
+include_directories(config)
 include_directories(inc)
 
 # Link Libraries

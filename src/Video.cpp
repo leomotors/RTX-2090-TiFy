@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 
-#include "AppConstants.h"
+#include "AppConfig.hpp"
 
 void Video::linkAudio(std::string fileName, double videoLength)
 {

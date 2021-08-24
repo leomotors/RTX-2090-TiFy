@@ -11,7 +11,7 @@
 #include <wx/progdlg.h>
 #include <wx/wx.h>
 
-#include "AppConstants.h"
+#include "AppConfig.hpp"
 #include "Configurations.hpp"
 #include "CorgiAlgorithm.hpp"
 #include "Video.hpp"

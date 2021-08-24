@@ -6,7 +6,7 @@
 #include <wx/wx.h>
 
 #include "AboutApp.hpp"
-#include "AppConstants.h"
+#include "AppConfig.hpp"
 #include "Events.hpp"
 #include "ImageHandler.hpp"
 #include "RTX2090Ti.hpp"
