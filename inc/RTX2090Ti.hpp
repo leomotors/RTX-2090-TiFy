@@ -15,6 +15,8 @@ class RTX2090Ti
     cv::Mat BaseImage;
     cv::Mat BaseImageGray;
     cv::Mat BaseImageHSV;
+    cv::Scalar HSVMean;
+    double ImageGrayBrightness;
 
     Configurations &Config;
     int fourcc;

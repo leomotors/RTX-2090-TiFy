@@ -48,11 +48,11 @@ MyFrame::MyFrame(const wxString &title, const wxPoint &pos, const wxSize &size)
     // * Sub-Row: Action Buttons
     wxBoxSizer *buttonBar = new wxBoxSizer(wxHORIZONTAL);
     buttonBar->Add(new wxButton(this, WARPSET_BUTTON, "Set Warp Points (Advanced)"), 0,
-                   wxSTRETCH_NOT, 30);
-    buttonBar->Add(new wxButton(this, LMAO_BUTTON, "Use GPU Acceleration"), 0, wxSTRETCH_NOT, 30);
-    buttonBar->Add(new wxButton(this, GENERATE_BUTTON, "Generate!"), 0, wxSTRETCH_NOT, 30);
+                   wxALIGN_CENTER, 30);
+    buttonBar->Add(new wxButton(this, LMAO_BUTTON, "Use GPU Acceleration"), 0, wxALIGN_CENTER, 30);
+    buttonBar->Add(new wxButton(this, GENERATE_BUTTON, "Generate!"), 0, wxALIGN_CENTER, 30);
 
-    mainColumn->Add(buttonBar, 0, wxEXPAND | wxALL, 5);
+    mainColumn->Add(buttonBar, 0, wxCENTER | wxALL, 10);
 
     // * Set Sizer And Fit
     this->SetSizerAndFit(mainColumn);

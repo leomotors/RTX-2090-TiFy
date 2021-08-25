@@ -30,6 +30,20 @@ RTX2090Ti::RTX2090Ti(wxWindow *parent, cv::Mat BaseImage, Configurations &Config
     OutVideo =
         cv::VideoWriter(Config.OutVideoPath + ".avi", fourcc, Config.FPS, cv::Size(cols, rows));
     OutVideo.write(this->BaseImage);
+
+    std::vector<cv::Mat> HSVChannels;
+    cv::split(BaseImageHSV, HSVChannels);
+    HSVMean = cv::mean(HSVChannels[2]);
+
+    double totalBrightness{0};
+    for (int r = 0; r < BaseImageGray.rows; r++)
+    {
+        for (int c = 0; c < BaseImageGray.cols; c++)
+        {
+            totalBrightness += BaseImageGray.at<u_char>(r, c);
+        }
+    }
+    ImageGrayBrightness = totalBrightness / (BaseImageGray.rows * BaseImageGray.cols * 255);
 }
 
 bool RTX2090Ti::buildVideo()
@@ -173,13 +187,14 @@ void RTX2090Ti::renderPixel(int c, int r, std::pair<int, int> &Start, std::pair<
     {
         cv::Vec3b color = BaseImage.at<cv::Vec3b>(cv::Point(c, r));
         ColoredImg = Corgi::changeTone(normalizedPic,
-                                       std::tuple<int, int, int>(color[0], color[1], color[2]));
+                                       std::tuple<int, int, int>(color[0], color[1], color[2]),
+                                       ImageGrayBrightness);
     }
     else if (Config.chosenAlgorithm == CORGI_HSV)
     {
         cv::Vec3b color = BaseImageHSV.at<cv::Vec3b>(cv::Point(c, r));
-        ColoredImg = Corgi::changeTone_HSV(
-            normalizedPic, std::tuple<uchar, uchar, uchar>(color[0], color[1], color[2]));
+        ColoredImg = Corgi::changeTone_HSV(normalizedPic,
+                                           std::tuple<int, int, int>(color[0], color[1], color[2]));
     }
     else
     {

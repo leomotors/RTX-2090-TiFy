@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.16)
-project(RTX-2090-TiFy VERSION 1.0.68.1)
+project(RTX-2090-TiFy VERSION 1.0.69)
 
 set(APP_VERSION "${CMAKE_PROJECT_VERSION}")
-set(VERSION_BRANCH "Beta")
+set(VERSION_BRANCH "Release Preview")
 configure_file(config/AppProps.h.in ${CMAKE_CURRENT_BINARY_DIR}/gen/AppProps.h)
 
 set(EXECUTABLE_NAME "RTX2090TiFy")
