@@ -14,6 +14,8 @@ class RTX2090Ti
   private:
     cv::Mat BaseImage;
     cv::Mat BaseImageGray;
+    cv::Mat BaseImageHSV;
+
     Configurations &Config;
     int fourcc;
     cv::VideoWriter OutVideo;

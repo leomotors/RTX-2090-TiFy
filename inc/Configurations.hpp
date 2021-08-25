@@ -9,17 +9,11 @@
 
 #include "ImageHandler.hpp"
 
-#define DEFAULT_OUTVID_RESOLUTION_X 480
-#define DEFAULT_OUTVID_RESOLUTION_Y 480
-#define DEFAULT_FPS 30
-#define DEFAULT_LOOP_DURATION 5.5
-#define DEFAULT_LOOPS_COUNT 6
-
 enum Algorithms
 {
     CORGI_LEGACY = 69,
     BRIGHTNESS_COMPENSATE = 420,
-    CORGI_HSV = 1337
+    CORGI_HSV = 177013
 };
 
 class Configurations
@@ -29,13 +23,13 @@ class Configurations
   private:
     std::vector<std::string> ItemsName;
     std::vector<std::string> ItemsGuide;
-    std::map<std::string, int> Algorithms;
+    std::map<int, std::string> Algorithms;
     int chosenAlgorithm;
 
-    std::pair<int, int> Resolution{DEFAULT_OUTVID_RESOLUTION_X, DEFAULT_OUTVID_RESOLUTION_Y};
-    int FPS{DEFAULT_FPS};
-    double LoopDuration{DEFAULT_LOOP_DURATION};
-    int nLoops{DEFAULT_LOOPS_COUNT};
+    std::pair<int, int> Resolution;
+    int FPS;
+    double LoopDuration;
+    int nLoops;
     std::vector<std::pair<int, int>> WarpPosition;
     std::string OutVideoPath;
 

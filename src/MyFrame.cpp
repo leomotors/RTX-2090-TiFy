@@ -62,6 +62,7 @@ MyFrame::MyFrame(const wxString &title, const wxPoint &pos, const wxSize &size)
 
 void MyFrame::OnExit(wxCommandEvent &event)
 {
+    std::cout << "Program exited by Users\n";
     Close(true);
 }
 

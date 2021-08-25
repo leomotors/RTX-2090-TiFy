@@ -2,6 +2,7 @@
 
 #include <cstdio>
 #include <cstdlib>
+#include <map>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -11,16 +12,37 @@
 #include "ImageHandler.hpp"
 #include "MyFrame.hpp"
 
+#define DEFAULT_OUTVID_RESOLUTION 480, 480
+#define DEFAULT_FPS 30
+#define DEFAULT_LOOP_DURATION 5.5
+#define DEFAULT_LOOPS_COUNT 6
+#define DEFAULT_ALGORITHM CORGI_LEGACY
+
 Configurations::Configurations(wxWindow *parent, ImageHandler &ImageHandlerRef)
     : parent(parent), ImageHandlerRef(ImageHandlerRef),
       ItemsName(std::vector<std::string>{"Output Video Path", "Output Video Resolution",
                                          "Output Video FPS", "Output Video Length Per Loop",
-                                         "Number of Loops"}),
-      ItemsGuide(std::vector<std::string>{"", "Resolution of Output Video\nExample: 480x480",
-                                          "FPS of Output Video", "Length of each Loop in the Video",
-                                          "Number of Loops in the Video"}),
-      chosenAlgorithm(CORGI_LEGACY)
+                                         "Number of Loops", "Algorithm"}),
+      ItemsGuide(std::vector<std::string>{
+          "", "Resolution of Output Video\nExample: 480x480", "FPS of Output Video",
+          "Length of each Loop in the Video", "Number of Loops in the Video",
+          "__if you see this message, error happened during initialization__"}),
+      Algorithms(std::map<int, std::string>{
+          {CORGI_LEGACY, "Corgi Legacy"},
+          {BRIGHTNESS_COMPENSATE, "Corgi Legacy with Brightness Compensate"},
+          {CORGI_HSV, "Corgi HSV"}}),
+      Resolution({DEFAULT_OUTVID_RESOLUTION}), FPS(DEFAULT_FPS),
+      LoopDuration(DEFAULT_LOOP_DURATION), nLoops(DEFAULT_LOOPS_COUNT),
+      chosenAlgorithm(DEFAULT_ALGORITHM)
 {
+    ItemsGuide[5] = "Algorithm used in rendering video\n" + [this]() -> std::string
+    {
+        std::string algodesc;
+        for (auto algorithm : this->Algorithms)
+            algodesc += algorithm.second + " : " + std::to_string(algorithm.first) + "\n";
+        return algodesc;
+    }();
+
     auto init = [](wxListView *toInit) -> void
     {
         toInit->InsertColumn(0, "Properties", wxLIST_FORMAT_CENTER, 250);
@@ -49,7 +71,7 @@ Configurations::Configurations(wxWindow *parent, ImageHandler &ImageHandlerRef)
         });
 
     // * Output Part Listview (Configable)
-    OutputListView = new wxListView(parent, wxID_ANY, wxDefaultPosition, wxSize(780, 150));
+    OutputListView = new wxListView(parent, wxID_ANY, wxDefaultPosition, wxSize(780, 180));
     init(OutputListView);
 
     for (int i = 0; i < ItemsName.size(); i++)
@@ -104,6 +126,7 @@ void Configurations::updateOutputList()
     OutputListView->SetItem(2, 1, std::to_string(FPS));
     OutputListView->SetItem(3, 1, std::to_string(LoopDuration));
     OutputListView->SetItem(4, 1, std::to_string(nLoops));
+    OutputListView->SetItem(5, 1, Algorithms[chosenAlgorithm]);
 }
 
 void Configurations::setOutputPath(std::string &outputPath)
@@ -275,6 +298,17 @@ std::string Configurations::validateConfig(int itemID, std::string toValidate)
 
         nLoops = nLoopsNew;
         setWarpPosition();
+        break;
+    }
+    case 5:
+    {
+        int newAlgorithm{0};
+        sscanf(toValidate.c_str(), "%d", &newAlgorithm);
+
+        if (Algorithms.find(newAlgorithm) == Algorithms.end())
+            return "Algorithm with ID of " + std::to_string(newAlgorithm) + " does not exist";
+
+        chosenAlgorithm = newAlgorithm;
         break;
     }
     default:

@@ -22,7 +22,7 @@ cv::Mat Corgi::changeTone(cv::Mat &NormalizedImage, std::tuple<int, int, int> Co
     return FinalImage;
 }
 
-cv::Mat Corgi::changeTone_HSV(cv::Mat NormalizedImage, std::tuple<int, int, int> Colors)
+cv::Mat Corgi::changeTone_HSV(cv::Mat NormalizedImage, std::tuple<uchar, uchar, uchar> Colors)
 {
     std::vector<cv::Mat> inputChannels;
     cv::split(NormalizedImage, inputChannels);

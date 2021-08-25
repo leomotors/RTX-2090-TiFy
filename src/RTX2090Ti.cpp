@@ -25,6 +25,7 @@ RTX2090Ti::RTX2090Ti(wxWindow *parent, cv::Mat BaseImage, Configurations &Config
 
     cv::resize(BaseImage, this->BaseImage, cv::Size(x, y));
     cv::cvtColor(this->BaseImage, BaseImageGray, cv::COLOR_BGR2GRAY);
+    cv::cvtColor(this->BaseImage, BaseImageHSV, cv::COLOR_BGR2HSV);
 
     OutVideo =
         cv::VideoWriter(Config.OutVideoPath + ".avi", fourcc, Config.FPS, cv::Size(cols, rows));
@@ -47,7 +48,8 @@ bool RTX2090Ti::buildVideo()
               << "Duration Per Loop: " << Config.LoopDuration << "\n"
               << "Number of Loops: " << Config.nLoops << "\n"
               << "Saving as: " << Config.OutVideoPath << "\n"
-              << "Total of: " << totalFrames * Config.nLoops << " frames\n";
+              << "Total of: " << totalFrames * Config.nLoops << " frames\n"
+              << "Using Algorithm: " << Config.Algorithms[Config.chosenAlgorithm] << "\n";
 
     int loopDone{0};
     cv::Mat temp(cv::Mat::zeros(cols, rows, CV_8UC3));
@@ -139,7 +141,7 @@ void RTX2090Ti::RayTracing(cv::VideoWriter &OutVideo, std::pair<int, int> &Start
 
     cv::Mat SmolImage;
     if (Config.chosenAlgorithm == CORGI_HSV)
-        cv::resize(BaseImage, SmolImage, cv::Size(PixelSize.first, PixelSize.second));
+        cv::resize(BaseImageHSV, SmolImage, cv::Size(PixelSize.first, PixelSize.second));
     else
         cv::resize(BaseImageGray, SmolImage, cv::Size(PixelSize.first, PixelSize.second));
 
@@ -159,14 +161,31 @@ void RTX2090Ti::renderPixel(int c, int r, std::pair<int, int> &Start, std::pair<
                             cv::Mat &normalizedPic, cv::Mat &RenderOn,
                             std::pair<int, int> &OriginalLoc)
 {
-    cv::Vec3b color = BaseImage.at<cv::Vec3b>(cv::Point(c, r));
+    cv::Vec3b color;
     cv::Mat ColoredImg;
+
     if (Config.chosenAlgorithm == CORGI_LEGACY)
+    {
         ColoredImg = Corgi::changeTone(normalizedPic,
                                        std::tuple<int, int, int>(color[0], color[1], color[2]));
+        color = BaseImage.at<cv::Vec3b>(cv::Point(c, r));
+    }
+    else if (Config.chosenAlgorithm == BRIGHTNESS_COMPENSATE)
+    {
+        ColoredImg = Corgi::changeTone(normalizedPic,
+                                       std::tuple<int, int, int>(color[0], color[1], color[2]));
+        color = BaseImage.at<cv::Vec3b>(cv::Point(c, r));
+    }
     else if (Config.chosenAlgorithm == CORGI_HSV)
-        ColoredImg = Corgi::changeTone_HSV(normalizedPic,
-                                           std::tuple<int, int, int>(color[0], color[1], color[2]));
+    {
+        ColoredImg = Corgi::changeTone_HSV(
+            normalizedPic, std::tuple<uchar, uchar, uchar>(color[0], color[1], color[2]));
+        color = BaseImageHSV.at<cv::Vec3b>(cv::Point(c, r));
+    }
+    else
+    {
+        throw "Some Function is SUS";
+    }
 
     cv::Point renderOnPos((c * cols - Start.first) * cols / (End.first - Start.first),
                           (r * rows - Start.second) * rows / (End.second - Start.second));
