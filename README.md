@@ -14,6 +14,10 @@ Also, My First GUI Program on C++
 
 **WORK IN PROGRESS** Visit Latest Preview Build [Here](https://github.com/Leomotors/RTX-2090-TiFy/releases)
 
+## 🔢 Algorithm
+
+Corgi Algorithm by Corgi Lover "[Uddy](https://github.com/WasinUddy)"
+
 ## ⬇️ Download
 
 Windows: Check out Releases [Here](https://github.com/Leomotors/RTX-2090-TiFy/releases) to download.
