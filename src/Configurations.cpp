@@ -26,7 +26,7 @@ Configurations::Configurations(wxWindow *parent, ImageHandler &ImageHandlerRef)
       ItemsGuide(std::vector<std::string>{
           "", "Resolution of Output Video\nExample: 480x480", "FPS of Output Video",
           "Length of each Loop in the Video", "Number of Loops in the Video",
-          "__if you see this message, error happened during initialization__"}),
+          "Algorithm used in rendering video\nPlease enter ID of your desire algorithm\n"}),
       Algorithms(std::map<int, std::string>{
           {CORGI_LEGACY, "Corgi Legacy"},
           {BRIGHTNESS_COMPENSATE, "Corgi Legacy with Brightness Compensate"},
@@ -35,7 +35,7 @@ Configurations::Configurations(wxWindow *parent, ImageHandler &ImageHandlerRef)
       LoopDuration(DEFAULT_LOOP_DURATION), nLoops(DEFAULT_LOOPS_COUNT),
       chosenAlgorithm(DEFAULT_ALGORITHM)
 {
-    ItemsGuide[5] = "Algorithm used in rendering video\n" + [this]() -> std::string
+    ItemsGuide[5] += [this]() -> std::string
     {
         std::string algodesc;
         for (auto algorithm : this->Algorithms)

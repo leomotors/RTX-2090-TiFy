@@ -161,26 +161,25 @@ void RTX2090Ti::renderPixel(int c, int r, std::pair<int, int> &Start, std::pair<
                             cv::Mat &normalizedPic, cv::Mat &RenderOn,
                             std::pair<int, int> &OriginalLoc)
 {
-    cv::Vec3b color;
     cv::Mat ColoredImg;
 
     if (Config.chosenAlgorithm == CORGI_LEGACY)
     {
+        cv::Vec3b color = BaseImage.at<cv::Vec3b>(cv::Point(c, r));
         ColoredImg = Corgi::changeTone(normalizedPic,
                                        std::tuple<int, int, int>(color[0], color[1], color[2]));
-        color = BaseImage.at<cv::Vec3b>(cv::Point(c, r));
     }
     else if (Config.chosenAlgorithm == BRIGHTNESS_COMPENSATE)
     {
+        cv::Vec3b color = BaseImage.at<cv::Vec3b>(cv::Point(c, r));
         ColoredImg = Corgi::changeTone(normalizedPic,
                                        std::tuple<int, int, int>(color[0], color[1], color[2]));
-        color = BaseImage.at<cv::Vec3b>(cv::Point(c, r));
     }
     else if (Config.chosenAlgorithm == CORGI_HSV)
     {
+        cv::Vec3b color = BaseImageHSV.at<cv::Vec3b>(cv::Point(c, r));
         ColoredImg = Corgi::changeTone_HSV(
             normalizedPic, std::tuple<uchar, uchar, uchar>(color[0], color[1], color[2]));
-        color = BaseImageHSV.at<cv::Vec3b>(cv::Point(c, r));
     }
     else
     {
