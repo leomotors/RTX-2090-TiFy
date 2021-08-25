@@ -18,7 +18,8 @@ Configurations::Configurations(wxWindow *parent, ImageHandler &ImageHandlerRef)
                                          "Number of Loops"}),
       ItemsGuide(std::vector<std::string>{"", "Resolution of Output Video\nExample: 480x480",
                                           "FPS of Output Video", "Length of each Loop in the Video",
-                                          "Number of Loops in the Video"})
+                                          "Number of Loops in the Video"}),
+      chosenAlgorithm(CORGI_LEGACY)
 {
     auto init = [](wxListView *toInit) -> void
     {

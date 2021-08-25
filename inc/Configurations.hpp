@@ -15,6 +15,13 @@
 #define DEFAULT_LOOP_DURATION 5.5
 #define DEFAULT_LOOPS_COUNT 6
 
+enum Algorithms
+{
+    CORGI_LEGACY = 69,
+    BRIGHTNESS_COMPENSATE = 420,
+    CORGI_HSV = 1337
+};
+
 class Configurations
 {
     friend class RTX2090Ti;
@@ -22,6 +29,8 @@ class Configurations
   private:
     std::vector<std::string> ItemsName;
     std::vector<std::string> ItemsGuide;
+    std::map<std::string, int> Algorithms;
+    int chosenAlgorithm;
 
     std::pair<int, int> Resolution{DEFAULT_OUTVID_RESOLUTION_X, DEFAULT_OUTVID_RESOLUTION_Y};
     int FPS{DEFAULT_FPS};

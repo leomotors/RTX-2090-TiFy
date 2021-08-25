@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(RTX-2090-TiFy VERSION 1.0.59.147)
+project(RTX-2090-TiFy VERSION 1.0.67)
 
 set(APP_VERSION "${CMAKE_PROJECT_VERSION}")
 set(VERSION_BRANCH "Beta")

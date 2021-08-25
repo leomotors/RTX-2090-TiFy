@@ -138,7 +138,10 @@ void RTX2090Ti::RayTracing(cv::VideoWriter &OutVideo, std::pair<int, int> &Start
                                   std::round((double)rows * rows / Imsize.second) + 1};
 
     cv::Mat SmolImage;
-    cv::resize(BaseImageGray, SmolImage, cv::Size(PixelSize.first, PixelSize.second));
+    if (Config.chosenAlgorithm == CORGI_HSV)
+        cv::resize(BaseImage, SmolImage, cv::Size(PixelSize.first, PixelSize.second));
+    else
+        cv::resize(BaseImageGray, SmolImage, cv::Size(PixelSize.first, PixelSize.second));
 
     for (int c = BigTileStart.first; c < BigTileEnd.first; c++)
     {
@@ -157,8 +160,13 @@ void RTX2090Ti::renderPixel(int c, int r, std::pair<int, int> &Start, std::pair<
                             std::pair<int, int> &OriginalLoc)
 {
     cv::Vec3b color = BaseImage.at<cv::Vec3b>(cv::Point(c, r));
-    cv::Mat ColoredImg =
-        Corgi::changeTone(normalizedPic, std::tuple<int, int, int>(color[0], color[1], color[2]));
+    cv::Mat ColoredImg;
+    if (Config.chosenAlgorithm == CORGI_LEGACY)
+        ColoredImg = Corgi::changeTone(normalizedPic,
+                                       std::tuple<int, int, int>(color[0], color[1], color[2]));
+    else if (Config.chosenAlgorithm == CORGI_HSV)
+        ColoredImg = Corgi::changeTone_HSV(normalizedPic,
+                                           std::tuple<int, int, int>(color[0], color[1], color[2]));
 
     cv::Point renderOnPos((c * cols - Start.first) * cols / (End.first - Start.first),
                           (r * rows - Start.second) * rows / (End.second - Start.second));

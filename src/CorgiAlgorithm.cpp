@@ -21,3 +21,18 @@ cv::Mat Corgi::changeTone(cv::Mat &NormalizedImage, std::tuple<int, int, int> Co
 
     return FinalImage;
 }
+
+cv::Mat Corgi::changeTone_HSV(cv::Mat NormalizedImage, std::tuple<int, int, int> Colors)
+{
+    std::vector<cv::Mat> inputChannels;
+    cv::split(NormalizedImage, inputChannels);
+
+    inputChannels[0] = std::get<0>(Colors);
+    inputChannels[1] = std::get<1>(Colors);
+    inputChannels[2] += cv::Scalar(std::get<2>(Colors)) - cv::mean(inputChannels[2]);
+
+    cv::merge(inputChannels, NormalizedImage);
+    cv::cvtColor(NormalizedImage, NormalizedImage, cv::COLOR_HSV2BGR);
+
+    return NormalizedImage;
+}
