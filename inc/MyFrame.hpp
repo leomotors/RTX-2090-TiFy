@@ -26,7 +26,7 @@ class MyFrame : public wxFrame
     void OnAbout(wxCommandEvent &event);
     void OnGitHub(wxCommandEvent &event);
 
-    void OnOpenFile(wxCommandEvent &event);
+    void OnOpenFile(wxCommandEvent &event = Events::dummyEvent);
     void OnSaveFile(wxCommandEvent &event = Events::dummyEvent);
     void OnAdvanced(wxCommandEvent &event);
     void OnGenerate(wxCommandEvent &event);

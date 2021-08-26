@@ -69,6 +69,8 @@ Configurations::Configurations(wxWindow *parent, ImageHandler &ImageHandlerRef)
             }
             SelectedInputRow = selected;
         });
+    InputListView->Bind(wxEVT_LIST_ITEM_ACTIVATED,
+                        [this](wxListEvent &event) { ((MyFrame *)(this->parent))->OnOpenFile(); });
 
     // * Output Part Listview (Configable)
     OutputListView = new wxListView(parent, wxID_ANY, wxDefaultPosition, wxSize(780, 180));
@@ -115,7 +117,7 @@ wxListView *Configurations::getOutputListView()
 void Configurations::updateInputList()
 {
     InputListView->SetItem(0, 1, ImageHandlerRef.getImagePath());
-    InputListView->SetItem(1, 1, ImageHandlerRef.getImageResStr());
+    InputListView->SetItem(1, 1, ImageHandlerRef.getImageResStr(true));
 }
 
 void Configurations::updateOutputList()

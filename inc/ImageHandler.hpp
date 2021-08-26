@@ -19,7 +19,7 @@ class ImageHandler
     ImageHandler();
     bool loadFile(std::string &filename);
     std::pair<int, int> getImageRes();
-    std::string getImageResStr();
+    std::string getImageResStr(bool withRatio = false);
     std::string getImagePath();
     cv::Mat getImage();
 };

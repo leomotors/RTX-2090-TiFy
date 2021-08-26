@@ -22,9 +22,13 @@ std::pair<int, int> ImageHandler::getImageRes()
     return ImgRes;
 }
 
-std::string ImageHandler::getImageResStr()
+std::string ImageHandler::getImageResStr(bool withRatio)
 {
-    return std::to_string(ImgRes.first) + "x" + std::to_string(ImgRes.second);
+    std::string toReturn = std::to_string(ImgRes.first) + "x" + std::to_string(ImgRes.second);
+    if (withRatio && ImgRes.first && ImgRes.second)
+        toReturn += " (" + std::to_string((double)ImgRes.first / ImgRes.second) + ":1)";
+
+    return toReturn;
 }
 
 std::string ImageHandler::getImagePath()
