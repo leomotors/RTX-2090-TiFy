@@ -1,6 +1,7 @@
 #include "MyFrame.hpp"
 
 #include <cstdlib>
+#include <exception>
 #include <opencv2/opencv.hpp>
 #include <wx/listctrl.h>
 #include <wx/wx.h>
@@ -149,8 +150,26 @@ void MyFrame::OnGenerate(wxCommandEvent &event)
     std::string traceback = ConfigList.isRTXReady();
     if (traceback.empty())
     {
-        RTX2090Ti RTX(this, Image.getImage(), ConfigList);
-        RTX.buildVideo();
+        try
+        {
+            RTX2090Ti RTX(this, Image.getImage(), ConfigList);
+            RTX.buildVideo();
+        }
+        catch (const std::exception &ex)
+        {
+            wxMessageBox(ex.what(), "std::exception thrown!", wxOK | wxICON_ERROR);
+        }
+        catch (const std::string &ex)
+        {
+            wxMessageBox(ex, "Exception thrown!", wxOK | wxICON_ERROR);
+        }
+        catch (...)
+        {
+            wxMessageBox("Unknown Exception has been thrown!", "Unknown Exception thrown!",
+                         wxOK | wxICON_ERROR);
+        }
+
+        cv::destroyAllWindows();
     }
     else
     {
