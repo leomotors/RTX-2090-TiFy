@@ -12,7 +12,7 @@ mkdir %dist_name%\temp
 set project_root_dir=%1
 set project_root_dir=%project_root_dir:/=\%
 
-copy %project_root_dir%\assets\ %dist_name%\assets
+copy %project_root_dir%\assets\RTX.mp3 %dist_name%\assets
 copy *.exe %dist_name%
 copy *.dll %dist_name%
 copy *.ilk %dist_name%
