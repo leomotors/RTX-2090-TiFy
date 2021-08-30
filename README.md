@@ -4,15 +4,15 @@ Turns you into RTX 2090 Ti
 
 Come in Easy to Use "GUI Program"
 
-Also, My First GUI Program on C++
+Also, My First GUI Program on C++ 🏆
 
 ## 🛣️ Reference
 
-[Linus Tech Tips Loop (YouTube)](https://www.youtube.com/watch?v=Xx59T5n4ZLo)
+<img src="./assets/linus-ref.gif" height=320px alt="LTT Internet Meme"/>
 
 ## ⚒️ My Implementation
 
-**WORK IN PROGRESS** Visit Latest Preview Build [Here](https://github.com/Leomotors/RTX-2090-TiFy/releases)
+![LTT My Implementation](./assets/linus-example.gif)
 
 ## 🔢 Algorithm
 
@@ -26,7 +26,7 @@ Linux: Currently, Only Build from Source is available.
 
 ## 🌿 Dependencies to Run
 
-- [FFmpeg (Command Line)](https://github.com/FFmpeg/FFmpeg) for generating with music
+- [FFmpeg (Command Line)](https://github.com/FFmpeg/FFmpeg) **must** be included in PATH
 
 ## 💻 Development & Building
 
@@ -46,4 +46,4 @@ Linux: Currently, Only Build from Source is available.
 - Linux ✔️
   - Ubuntu 20.04 on Windows Linux Subsystem (Kernel 5.10.43.3 with WSLg 1.0.26) on Windows 11 Build 22000
   - gcc 9.3.0
-  - wxWidgets Built with GTK 3
+  - wxWidgets Built from Source with GTK 3
