@@ -57,6 +57,15 @@ void Video::linkAudio(std::string fileName, double videoLength)
     std::cout << "Executing: " << linkAudioCommand << "\n";
     std::system(linkAudioCommand.c_str());
 
+    std::string cleanTempCmd;
+    if (OS::isWindows())
+        cleanTempCmd = "del";
+    else
+        cleanTempCmd = "rm";
+    cleanTempCmd += " " + safeFileName + ".temp.avi " + safeFileName + ".avi";
+    std::cout << "Executing: " << cleanTempCmd << "\n";
+    std::system(cleanTempCmd.c_str());
+
     std::cout << "FFmpeg: Linking Audio Success\n";
     return;
 }

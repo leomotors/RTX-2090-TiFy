@@ -16,6 +16,10 @@
 #include "CorgiAlgorithm.hpp"
 #include "Video.hpp"
 
+#define SMOL_IMG_PAUSE 0.18
+#define BLEND_START 0.09
+#define EXPANSION_GROWTH 2.77
+
 RTX2090Ti::RTX2090Ti(wxWindow *parent, cv::Mat BaseImage, Configurations &Config)
     : parent(parent), Config(Config), fourcc(cv::VideoWriter::fourcc(MYCODEC))
 {
@@ -83,7 +87,7 @@ bool RTX2090Ti::buildVideo()
         for (int f = 1; f <= totalFrames; f++)
         {
             double expansionRate = (double)f / totalFrames;
-            expansionRate = std::pow(expansionRate, 2.75);
+            expansionRate = std::pow(expansionRate, EXPANSION_GROWTH);
 
             std::pair<int, int> LocalStart{Start.first - std::round(left * expansionRate),
                                            Start.second - std::round(up * expansionRate)};
@@ -114,7 +118,7 @@ bool RTX2090Ti::buildVideo()
         parent,
         "Build Success! Took " + std::to_string(time_took.count()) +
             " seconds.\nYour Video is Ready, would you like to open the video?"
-            "\nNOTE: Currently, FFmpeg is Required for Video with Music",
+            "\nIMPORTANT: FFmpeg must be included in your path, otherwise video will not appear",
         "Build Success", wxOK | wxCANCEL);
 
     if (doneMessage.ShowModal() == wxID_OK)
@@ -128,7 +132,9 @@ bool RTX2090Ti::buildVideo()
 void RTX2090Ti::RayTracing(cv::VideoWriter &OutVideo, std::pair<int, int> &Start,
                            std::pair<int, int> &End, std::pair<int, int> &OriginalLoc)
 {
-    if ((End.first - Start.first) / cols > 0.2 * cols)
+    double pixelSizeFactor = (double)(End.first - Start.first) / (cols * cols);
+
+    if (pixelSizeFactor >= SMOL_IMG_PAUSE)
     {
         cv::Mat cropped_img = BaseImage(cv::Range(std::round(Start.second / (double)rows),
                                                   std::round(End.second / (double)rows)),
@@ -167,6 +173,20 @@ void RTX2090Ti::RayTracing(cv::VideoWriter &OutVideo, std::pair<int, int> &Start
         }
     }
 
+    if (Config.chosenAlgorithm == BLEND_S && pixelSizeFactor >= BLEND_START)
+    {
+        double blendFactor = (pixelSizeFactor - BLEND_START) / (SMOL_IMG_PAUSE - BLEND_START);
+        cv::Mat cropped_img = BaseImage(cv::Range(std::round(Start.second / (double)rows),
+                                                  std::round(End.second / (double)rows)),
+                                        cv::Range(std::round(Start.first / (double)cols),
+                                                  std::round(End.first / (double)cols)));
+
+        cv::resize(cropped_img, cropped_img, cv::Size(cols, rows));
+
+        Canvas *= (1 - blendFactor);
+        Canvas += (cropped_img * blendFactor);
+    }
+
     OutVideo.write(Canvas);
     cv::imshow("Live Preview", Canvas);
 }
@@ -177,7 +197,7 @@ void RTX2090Ti::renderPixel(int c, int r, std::pair<int, int> &Start, std::pair<
 {
     cv::Mat ColoredImg;
 
-    if (Config.chosenAlgorithm == CORGI_LEGACY)
+    if (Config.chosenAlgorithm == CORGI_LEGACY || Config.chosenAlgorithm == BLEND_S)
     {
         cv::Vec3b color = BaseImage.at<cv::Vec3b>(cv::Point(c, r));
         ColoredImg = Corgi::changeTone(normalizedPic,

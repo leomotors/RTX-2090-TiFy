@@ -13,7 +13,8 @@ enum Algorithms
 {
     CORGI_LEGACY = 69,
     BRIGHTNESS_COMPENSATE = 420,
-    CORGI_HSV = 177013
+    CORGI_HSV = 1337,
+    BLEND_S = 177013
 };
 
 class Configurations

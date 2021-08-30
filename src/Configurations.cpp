@@ -16,7 +16,7 @@
 #define DEFAULT_FPS 30
 #define DEFAULT_LOOP_DURATION 5.5
 #define DEFAULT_LOOPS_COUNT 6
-#define DEFAULT_ALGORITHM CORGI_LEGACY
+#define DEFAULT_ALGORITHM BLEND_S
 
 Configurations::Configurations(wxWindow *parent, ImageHandler &ImageHandlerRef)
     : parent(parent), ImageHandlerRef(ImageHandlerRef),
@@ -30,7 +30,8 @@ Configurations::Configurations(wxWindow *parent, ImageHandler &ImageHandlerRef)
       Algorithms(std::map<int, std::string>{
           {CORGI_LEGACY, "Corgi Legacy"},
           {BRIGHTNESS_COMPENSATE, "Corgi Legacy with Brightness Compensate"},
-          {CORGI_HSV, "Corgi HSV"}}),
+          {CORGI_HSV, "Corgi HIV"},
+          {BLEND_S, "Blend Sukhoi"}}),
       Resolution({DEFAULT_OUTVID_RESOLUTION}), FPS(DEFAULT_FPS),
       LoopDuration(DEFAULT_LOOP_DURATION), nLoops(DEFAULT_LOOPS_COUNT),
       chosenAlgorithm(DEFAULT_ALGORITHM)
@@ -39,7 +40,9 @@ Configurations::Configurations(wxWindow *parent, ImageHandler &ImageHandlerRef)
     {
         std::string algodesc;
         for (auto algorithm : this->Algorithms)
-            algodesc += algorithm.second + " : " + std::to_string(algorithm.first) + "\n";
+            algodesc += algorithm.second +
+                        ((algorithm.first == chosenAlgorithm) ? " (Default) " : "") + " : " +
+                        std::to_string(algorithm.first) + "\n";
         return algodesc;
     }();
 
