@@ -16,7 +16,6 @@
 #define DEFAULT_POS 600, 200
 #endif
 
-namespace OS
-{
+namespace OS {
 bool isWindows();
 }

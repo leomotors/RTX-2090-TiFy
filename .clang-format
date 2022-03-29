@@ -1,7 +1,8 @@
 UseTab: false
 IndentWidth: 4
-BreakBeforeBraces: Allman
+BreakBeforeBraces: Attach
 AllowShortIfStatementsOnASingleLine: false
 IndentCaseLabels: false
-ColumnLimit: 100
+ColumnLimit: 80
+ReflowComments: false
 AllowShortFunctionsOnASingleLine: Empty

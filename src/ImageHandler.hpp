@@ -4,8 +4,7 @@
 #include <string>
 #include <utility>
 
-class ImageHandler
-{
+class ImageHandler {
   private:
     std::string ImagePath;
     cv::Mat Image;

@@ -8,8 +8,7 @@
 #include "Events.hpp"
 #include "ImageHandler.hpp"
 
-class MyFrame : public wxFrame
-{
+class MyFrame : public wxFrame {
     friend class Configurations;
 
   private:

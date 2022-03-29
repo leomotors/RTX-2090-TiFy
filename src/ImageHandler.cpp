@@ -6,8 +6,7 @@
 
 ImageHandler::ImageHandler() : status(false) {}
 
-bool ImageHandler::loadFile(std::string &filename)
-{
+bool ImageHandler::loadFile(std::string &filename) {
     ImagePath = filename;
     Image = cv::imread(filename);
     ImageGray = cv::imread(filename, cv::IMREAD_GRAYSCALE);
@@ -17,26 +16,24 @@ bool ImageHandler::loadFile(std::string &filename)
     return status;
 }
 
-std::pair<int, int> ImageHandler::getImageRes()
-{
+std::pair<int, int> ImageHandler::getImageRes() {
     return ImgRes;
 }
 
-std::string ImageHandler::getImageResStr(bool withRatio)
-{
-    std::string toReturn = std::to_string(ImgRes.first) + "x" + std::to_string(ImgRes.second);
+std::string ImageHandler::getImageResStr(bool withRatio) {
+    std::string toReturn =
+        std::to_string(ImgRes.first) + "x" + std::to_string(ImgRes.second);
     if (withRatio && ImgRes.first && ImgRes.second)
-        toReturn += " (" + std::to_string((double)ImgRes.first / ImgRes.second) + ":1)";
+        toReturn +=
+            " (" + std::to_string((double)ImgRes.first / ImgRes.second) + ":1)";
 
     return toReturn;
 }
 
-std::string ImageHandler::getImagePath()
-{
+std::string ImageHandler::getImagePath() {
     return ImagePath;
 }
 
-cv::Mat ImageHandler::getImage()
-{
+cv::Mat ImageHandler::getImage() {
     return Image;
 }

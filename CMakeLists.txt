@@ -1,8 +1,9 @@
 cmake_minimum_required(VERSION 3.16)
-project(RTX-2090-TiFy VERSION 1.0.69.420)
+project(RTX-2090-TiFy VERSION 1.0.69.4200)
 
 set(APP_VERSION "${CMAKE_PROJECT_VERSION}")
 set(VERSION_BRANCH "Release")
+set(BUILD_DATE "13 January 2022")
 configure_file(config/AppProps.h.in ${CMAKE_CURRENT_BINARY_DIR}/gen/AppProps.h)
 
 set(EXECUTABLE_NAME "RTX2090TiFy")
@@ -29,7 +30,6 @@ else()
 endif()
 
 include_directories(config)
-include_directories(inc)
 
 # Link Libraries
 target_link_libraries(${EXECUTABLE_NAME} ${wxWidgets_LIBRARIES})

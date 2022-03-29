@@ -20,9 +20,9 @@
 #define BLEND_START 0.09
 #define EXPANSION_GROWTH 2.77
 
-RTX2090Ti::RTX2090Ti(wxWindow *parent, cv::Mat BaseImage, Configurations &Config)
-    : parent(parent), Config(Config), fourcc(cv::VideoWriter::fourcc(MYCODEC))
-{
+RTX2090Ti::RTX2090Ti(wxWindow *parent, cv::Mat BaseImage,
+                     Configurations &Config)
+    : parent(parent), Config(Config), fourcc(cv::VideoWriter::fourcc(MYCODEC)) {
     const auto &[x, y] = Config.Resolution;
     cols = x;
     rows = y;
@@ -31,8 +31,8 @@ RTX2090Ti::RTX2090Ti(wxWindow *parent, cv::Mat BaseImage, Configurations &Config
     cv::cvtColor(this->BaseImage, BaseImageGray, cv::COLOR_BGR2GRAY);
     cv::cvtColor(this->BaseImage, BaseImageHSV, cv::COLOR_BGR2HSV);
 
-    OutVideo =
-        cv::VideoWriter(Config.OutVideoPath + ".avi", fourcc, Config.FPS, cv::Size(cols, rows));
+    OutVideo = cv::VideoWriter(Config.OutVideoPath + ".avi", fourcc, Config.FPS,
+                               cv::Size(cols, rows));
     OutVideo.write(this->BaseImage);
 
     std::vector<cv::Mat> HSVChannels;
@@ -40,25 +40,23 @@ RTX2090Ti::RTX2090Ti(wxWindow *parent, cv::Mat BaseImage, Configurations &Config
     HSVMean = cv::mean(HSVChannels[2]);
 
     double totalBrightness{0};
-    for (int r = 0; r < BaseImageGray.rows; r++)
-    {
-        for (int c = 0; c < BaseImageGray.cols; c++)
-        {
+    for (int r = 0; r < BaseImageGray.rows; r++) {
+        for (int c = 0; c < BaseImageGray.cols; c++) {
             totalBrightness += BaseImageGray.at<u_char>(r, c);
         }
     }
-    ImageGrayBrightness = totalBrightness / (BaseImageGray.rows * BaseImageGray.cols * 255);
+    ImageGrayBrightness =
+        totalBrightness / (BaseImageGray.rows * BaseImageGray.cols * 255);
 }
 
-bool RTX2090Ti::buildVideo()
-{
+bool RTX2090Ti::buildVideo() {
     auto start{std::chrono::steady_clock::now()};
 
     int totalFrames = Config.FPS * Config.LoopDuration;
 
-    wxProgressDialog BuildProgress("Building Video...",
-                                   statusMessage(0, Config.nLoops, 0, totalFrames),
-                                   totalFrames * Config.nLoops, parent);
+    wxProgressDialog BuildProgress(
+        "Building Video...", statusMessage(0, Config.nLoops, 0, totalFrames),
+        totalFrames * Config.nLoops, parent);
 
     std::cout << "Building Video with these properties\n"
               << "Resolution: " << cols << "x" << rows << "\n"
@@ -67,37 +65,40 @@ bool RTX2090Ti::buildVideo()
               << "Number of Loops: " << Config.nLoops << "\n"
               << "Saving as: " << Config.OutVideoPath << "\n"
               << "Total of: " << totalFrames * Config.nLoops << " frames\n"
-              << "Using Algorithm: " << Config.Algorithms[Config.chosenAlgorithm] << "\n";
+              << "Using Algorithm: "
+              << Config.Algorithms[Config.chosenAlgorithm] << "\n";
 
     int loopDone{0};
     cv::Mat temp(cv::Mat::zeros(cols, rows, CV_8UC3));
 
-    for (std::pair<int, int> &point : Config.WarpPosition)
-    {
+    for (std::pair<int, int> &point : Config.WarpPosition) {
         int framesDone = loopDone * totalFrames;
 
         std::pair<int, int> Start{point.first * cols, point.second * rows};
-        std::pair<int, int> End{(point.first + 1) * cols, (point.second + 1) * rows + 1};
+        std::pair<int, int> End{(point.first + 1) * cols,
+                                (point.second + 1) * rows + 1};
 
         int left = cols * point.first;
         int up = rows * point.second;
         int right = cols * (cols - point.first - 1);
         int down = rows * (rows - point.second - 1);
 
-        for (int f = 1; f <= totalFrames; f++)
-        {
+        for (int f = 1; f <= totalFrames; f++) {
             double expansionRate = (double)f / totalFrames;
             expansionRate = std::pow(expansionRate, EXPANSION_GROWTH);
 
-            std::pair<int, int> LocalStart{Start.first - std::round(left * expansionRate),
-                                           Start.second - std::round(up * expansionRate)};
-            std::pair<int, int> LocalEnd{End.first + std::round(right * expansionRate),
-                                         End.second + std::round(down * expansionRate)};
+            std::pair<int, int> LocalStart{
+                Start.first - std::round(left * expansionRate),
+                Start.second - std::round(up * expansionRate)};
+            std::pair<int, int> LocalEnd{
+                End.first + std::round(right * expansionRate),
+                End.second + std::round(down * expansionRate)};
 
             RayTracing(OutVideo, LocalStart, LocalEnd, point);
 
-            BuildProgress.Update(framesDone + f,
-                                 statusMessage(loopDone, Config.nLoops, f, totalFrames));
+            BuildProgress.Update(
+                framesDone + f,
+                statusMessage(loopDone, Config.nLoops, f, totalFrames));
         }
 
         loopDone++;
@@ -118,28 +119,28 @@ bool RTX2090Ti::buildVideo()
         parent,
         "Build Success! Took " + std::to_string(time_took.count()) +
             " seconds.\nYour Video is Ready, would you like to open the video?"
-            "\nIMPORTANT: FFmpeg must be included in your path, otherwise video will not appear",
+            "\nIMPORTANT: FFmpeg must be included in your path, otherwise "
+            "video will not appear",
         "Build Success", wxOK | wxCANCEL);
 
-    if (doneMessage.ShowModal() == wxID_OK)
-    {
+    if (doneMessage.ShowModal() == wxID_OK) {
         wxLaunchDefaultApplication(Config.OutVideoPath + ".mp4");
     }
 
     return true;
 }
 
-void RTX2090Ti::RayTracing(cv::VideoWriter &OutVideo, std::pair<int, int> &Start,
-                           std::pair<int, int> &End, std::pair<int, int> &OriginalLoc)
-{
+void RTX2090Ti::RayTracing(cv::VideoWriter &OutVideo,
+                           std::pair<int, int> &Start, std::pair<int, int> &End,
+                           std::pair<int, int> &OriginalLoc) {
     double pixelSizeFactor = (double)(End.first - Start.first) / (cols * cols);
 
-    if (pixelSizeFactor >= SMOL_IMG_PAUSE)
-    {
-        cv::Mat cropped_img = BaseImage(cv::Range(std::round(Start.second / (double)rows),
-                                                  std::round(End.second / (double)rows)),
-                                        cv::Range(std::round(Start.first / (double)cols),
-                                                  std::round(End.first / (double)cols)));
+    if (pixelSizeFactor >= SMOL_IMG_PAUSE) {
+        cv::Mat cropped_img =
+            BaseImage(cv::Range(std::round(Start.second / (double)rows),
+                                std::round(End.second / (double)rows)),
+                      cv::Range(std::round(Start.first / (double)cols),
+                                std::round(End.first / (double)cols)));
 
         cv::resize(cropped_img, cropped_img, cv::Size(cols, rows));
         OutVideo.write(cropped_img);
@@ -150,36 +151,39 @@ void RTX2090Ti::RayTracing(cv::VideoWriter &OutVideo, std::pair<int, int> &Start
 
     cv::Mat Canvas = cv::Mat::zeros(cv::Size(cols, rows), CV_8UC3);
 
-    std::pair<int, int> Imsize{End.first - Start.first, End.second - Start.second};
+    std::pair<int, int> Imsize{End.first - Start.first,
+                               End.second - Start.second};
 
     std::pair<int, int> BigTileStart{Start.first / cols, Start.second / rows};
     std::pair<int, int> BigTileEnd{std::ceil((double)End.first / cols),
                                    std::ceil((double)End.second / rows)};
 
-    std::pair<int, int> PixelSize{std::round((double)cols * cols / Imsize.first) + 1,
-                                  std::round((double)rows * rows / Imsize.second) + 1};
+    std::pair<int, int> PixelSize{
+        std::round((double)cols * cols / Imsize.first) + 1,
+        std::round((double)rows * rows / Imsize.second) + 1};
 
     cv::Mat SmolImage;
     if (Config.chosenAlgorithm == CORGI_HSV)
-        cv::resize(BaseImageHSV, SmolImage, cv::Size(PixelSize.first, PixelSize.second));
+        cv::resize(BaseImageHSV, SmolImage,
+                   cv::Size(PixelSize.first, PixelSize.second));
     else
-        cv::resize(BaseImageGray, SmolImage, cv::Size(PixelSize.first, PixelSize.second));
+        cv::resize(BaseImageGray, SmolImage,
+                   cv::Size(PixelSize.first, PixelSize.second));
 
-    for (int c = BigTileStart.first; c < BigTileEnd.first; c++)
-    {
-        for (int r = BigTileStart.second; r < BigTileEnd.second; r++)
-        {
+    for (int c = BigTileStart.first; c < BigTileEnd.first; c++) {
+        for (int r = BigTileStart.second; r < BigTileEnd.second; r++) {
             renderPixel(c, r, Start, End, SmolImage, Canvas, OriginalLoc);
         }
     }
 
-    if (Config.chosenAlgorithm == BLEND_S && pixelSizeFactor >= BLEND_START)
-    {
-        double blendFactor = (pixelSizeFactor - BLEND_START) / (SMOL_IMG_PAUSE - BLEND_START);
-        cv::Mat cropped_img = BaseImage(cv::Range(std::round(Start.second / (double)rows),
-                                                  std::round(End.second / (double)rows)),
-                                        cv::Range(std::round(Start.first / (double)cols),
-                                                  std::round(End.first / (double)cols)));
+    if (Config.chosenAlgorithm == BLEND_S && pixelSizeFactor >= BLEND_START) {
+        double blendFactor =
+            (pixelSizeFactor - BLEND_START) / (SMOL_IMG_PAUSE - BLEND_START);
+        cv::Mat cropped_img =
+            BaseImage(cv::Range(std::round(Start.second / (double)rows),
+                                std::round(End.second / (double)rows)),
+                      cv::Range(std::round(Start.first / (double)cols),
+                                std::round(End.first / (double)cols)));
 
         cv::resize(cropped_img, cropped_img, cv::Size(cols, rows));
 
@@ -191,48 +195,47 @@ void RTX2090Ti::RayTracing(cv::VideoWriter &OutVideo, std::pair<int, int> &Start
     cv::imshow("Live Preview", Canvas);
 }
 
-void RTX2090Ti::renderPixel(int c, int r, std::pair<int, int> &Start, std::pair<int, int> &End,
-                            cv::Mat &normalizedPic, cv::Mat &RenderOn,
-                            std::pair<int, int> &OriginalLoc)
-{
+void RTX2090Ti::renderPixel(int c, int r, std::pair<int, int> &Start,
+                            std::pair<int, int> &End, cv::Mat &normalizedPic,
+                            cv::Mat &RenderOn,
+                            std::pair<int, int> &OriginalLoc) {
     cv::Mat ColoredImg;
 
-    if (Config.chosenAlgorithm == CORGI_LEGACY || Config.chosenAlgorithm == BLEND_S)
-    {
+    if (Config.chosenAlgorithm == CORGI_LEGACY ||
+        Config.chosenAlgorithm == BLEND_S) {
         cv::Vec3b color = BaseImage.at<cv::Vec3b>(cv::Point(c, r));
-        ColoredImg = Corgi::changeTone(normalizedPic,
-                                       std::tuple<int, int, int>(color[0], color[1], color[2]));
-    }
-    else if (Config.chosenAlgorithm == BRIGHTNESS_COMPENSATE)
-    {
+        ColoredImg = Corgi::changeTone(
+            normalizedPic,
+            std::tuple<int, int, int>(color[0], color[1], color[2]));
+    } else if (Config.chosenAlgorithm == BRIGHTNESS_COMPENSATE) {
         cv::Vec3b color = BaseImage.at<cv::Vec3b>(cv::Point(c, r));
-        ColoredImg = Corgi::changeTone(normalizedPic,
-                                       std::tuple<int, int, int>(color[0], color[1], color[2]),
-                                       ImageGrayBrightness);
-    }
-    else if (Config.chosenAlgorithm == CORGI_HSV)
-    {
+        ColoredImg = Corgi::changeTone(
+            normalizedPic,
+            std::tuple<int, int, int>(color[0], color[1], color[2]),
+            ImageGrayBrightness);
+    } else if (Config.chosenAlgorithm == CORGI_HSV) {
         cv::Vec3b color = BaseImageHSV.at<cv::Vec3b>(cv::Point(c, r));
-        ColoredImg = Corgi::changeTone_HSV(normalizedPic,
-                                           std::tuple<int, int, int>(color[0], color[1], color[2]));
-    }
-    else
-    {
+        ColoredImg = Corgi::changeTone_HSV(
+            normalizedPic,
+            std::tuple<int, int, int>(color[0], color[1], color[2]));
+    } else {
         throw "Some Function is SUS";
     }
 
-    cv::Point renderOnPos((c * cols - Start.first) * cols / (End.first - Start.first),
-                          (r * rows - Start.second) * rows / (End.second - Start.second));
+    cv::Point renderOnPos(
+        (c * cols - Start.first) * cols / (End.first - Start.first),
+        (r * rows - Start.second) * rows / (End.second - Start.second));
 
-    cv::Point renderEnd(renderOnPos.x + normalizedPic.cols, renderOnPos.y + normalizedPic.rows);
+    cv::Point renderEnd(renderOnPos.x + normalizedPic.cols,
+                        renderOnPos.y + normalizedPic.rows);
 
     cv::Rect renderRange(renderOnPos, renderEnd);
 
     // * Case: Original Picture
-    if (c == OriginalLoc.first && r == OriginalLoc.second)
-    {
+    if (c == OriginalLoc.first && r == OriginalLoc.second) {
         cv::Mat toRender;
-        cv::resize(BaseImage, toRender, cv::Size(normalizedPic.cols, normalizedPic.rows));
+        cv::resize(BaseImage, toRender,
+                   cv::Size(normalizedPic.cols, normalizedPic.rows));
 
         safeCopyTo(toRender, RenderOn, renderRange);
 
@@ -243,8 +246,7 @@ void RTX2090Ti::renderPixel(int c, int r, std::pair<int, int> &Start, std::pair<
     safeCopyTo(ColoredImg, RenderOn, renderRange);
 }
 
-void RTX2090Ti::safeCopyTo(cv::Mat &src, cv::Mat &dest, cv::Rect &roi)
-{
+void RTX2090Ti::safeCopyTo(cv::Mat &src, cv::Mat &dest, cv::Rect &roi) {
     std::pair<int, int> newXRange{0, roi.width};
     std::pair<int, int> newYRange{0, roi.height};
 
@@ -253,48 +255,39 @@ void RTX2090Ti::safeCopyTo(cv::Mat &src, cv::Mat &dest, cv::Rect &roi)
     bool right{false};
     bool down{false};
 
-    if (roi.x < 0)
-    {
+    if (roi.x < 0) {
         newXRange.first = -roi.x;
         left = true;
     }
-    if (roi.y < 0)
-    {
+    if (roi.y < 0) {
         newYRange.first = -roi.y;
         up = true;
     }
-    if (roi.x + roi.width > cols)
-    {
+    if (roi.x + roi.width > cols) {
         newXRange.second = cols - roi.x;
         right = true;
     }
-    if (roi.y + roi.height > rows)
-    {
+    if (roi.y + roi.height > rows) {
         newYRange.second = rows - roi.y;
         down = true;
     }
 
-    if (left || up || right || down)
-    {
+    if (left || up || right || down) {
         src = src(cv::Range(newYRange.first, newYRange.second),
                   cv::Range(newXRange.first, newXRange.second));
 
-        if (left)
-        {
+        if (left) {
             roi.width += roi.x;
             roi.x = 0;
         }
-        if (right)
-        {
+        if (right) {
             roi.width = src.cols;
         }
-        if (up)
-        {
+        if (up) {
             roi.height += roi.y;
             roi.y = 0;
         }
-        if (down)
-        {
+        if (down) {
             roi.height = src.rows;
         }
     }
@@ -302,11 +295,13 @@ void RTX2090Ti::safeCopyTo(cv::Mat &src, cv::Mat &dest, cv::Rect &roi)
     src.copyTo(dest(roi));
 }
 
-std::string RTX2090Ti::statusMessage(int loopsDone, int allLoops, int framesDone, int allFrames)
-{
+std::string RTX2090Ti::statusMessage(int loopsDone, int allLoops,
+                                     int framesDone, int allFrames) {
     std::string result;
-    result += "Loops Done: " + std::to_string(loopsDone) + " of " + std::to_string(allLoops);
+    result += "Loops Done: " + std::to_string(loopsDone) + " of " +
+              std::to_string(allLoops);
     result += "\n";
-    result += "Frames Done: " + std::to_string(framesDone) + " of " + std::to_string(allFrames);
+    result += "Frames Done: " + std::to_string(framesDone) + " of " +
+              std::to_string(allFrames);
     return result;
 }

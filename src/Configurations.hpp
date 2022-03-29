@@ -9,16 +9,14 @@
 
 #include "ImageHandler.hpp"
 
-enum Algorithms
-{
+enum Algorithms {
     CORGI_LEGACY = 69,
     BRIGHTNESS_COMPENSATE = 420,
     CORGI_HSV = 1337,
     BLEND_S = 177013
 };
 
-class Configurations
-{
+class Configurations {
     friend class RTX2090Ti;
 
   private:
@@ -60,8 +58,8 @@ class Configurations
     std::string isRTXReady();
 
   private:
-    void
-    setWarpPosition(std::vector<std::pair<int, int>> newWarp = std::vector<std::pair<int, int>>());
+    void setWarpPosition(std::vector<std::pair<int, int>> newWarp =
+                             std::vector<std::pair<int, int>>());
 
     void OnOutputListActivated(int selected);
 

@@ -2,8 +2,7 @@
 
 #include <string>
 
-namespace App
-{
+namespace App {
 std::string aboutAppSimple();
 std::string aboutAppLong();
 } // namespace App

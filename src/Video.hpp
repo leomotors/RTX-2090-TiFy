@@ -2,7 +2,6 @@
 
 #include <string>
 
-namespace Video
-{
+namespace Video {
 void linkAudio(std::string fileName, double videoLength);
 }

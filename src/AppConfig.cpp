@@ -1,7 +1,6 @@
 #include "AppConfig.hpp"
 
-bool OS::isWindows()
-{
+bool OS::isWindows() {
 #if defined(WIN32)
     return true;
 #else

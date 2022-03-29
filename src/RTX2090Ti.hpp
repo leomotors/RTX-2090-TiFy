@@ -9,8 +9,7 @@
 
 #define MYCODEC 'X', 'V', 'I', 'D'
 
-class RTX2090Ti
-{
+class RTX2090Ti {
   private:
     cv::Mat BaseImage;
     cv::Mat BaseImageGray;
@@ -32,10 +31,12 @@ class RTX2090Ti
 
   private:
     // * For each Frames
-    void RayTracing(cv::VideoWriter &OutVideo, std::pair<int, int> &Start, std::pair<int, int> &End,
-                    std::pair<int, int> &OriginalLoc);
-    void renderPixel(int c, int r, std::pair<int, int> &Start, std::pair<int, int> &End,
-                     cv::Mat &normalizedPic, cv::Mat &RenderOn, std::pair<int, int> &OriginalLoc);
+    void RayTracing(cv::VideoWriter &OutVideo, std::pair<int, int> &Start,
+                    std::pair<int, int> &End, std::pair<int, int> &OriginalLoc);
+    void renderPixel(int c, int r, std::pair<int, int> &Start,
+                     std::pair<int, int> &End, cv::Mat &normalizedPic,
+                     cv::Mat &RenderOn, std::pair<int, int> &OriginalLoc);
     void safeCopyTo(cv::Mat &src, cv::Mat &dest, cv::Rect &roi);
-    std::string statusMessage(int loopsDone, int allLoops, int framesDone, int allFrames);
+    std::string statusMessage(int loopsDone, int allLoops, int framesDone,
+                              int allFrames);
 };
