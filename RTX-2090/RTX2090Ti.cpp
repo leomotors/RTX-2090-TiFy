@@ -8,21 +8,21 @@
 #include <string>
 #include <tuple>
 #include <utility>
-#include <wx/progdlg.h>
-#include <wx/wx.h>
 
-#include "AppConfig.hpp"
 #include "Configurations.hpp"
 #include "CorgiAlgorithm.hpp"
+#include "IProgressBar.hpp"
 #include "Video.hpp"
 
 #define SMOL_IMG_PAUSE 0.18
 #define BLEND_START 0.09
 #define EXPANSION_GROWTH 2.77
 
-RTX2090Ti::RTX2090Ti(wxWindow *parent, cv::Mat BaseImage,
+RTX2090Ti::RTX2090Ti(IProgressBar &progressBar, cv::Mat BaseImage,
                      Configurations &Config)
-    : parent(parent), Config(Config), fourcc(cv::VideoWriter::fourcc(MYCODEC)) {
+    : progressBar(progressBar),
+      Config(Config),
+      fourcc(cv::VideoWriter::fourcc(MYCODEC)) {
     const auto &[x, y] = Config.Resolution;
     cols = x;
     rows = y;
@@ -54,9 +54,12 @@ bool RTX2090Ti::buildVideo() {
 
     int totalFrames = Config.FPS * Config.LoopDuration;
 
-    wxProgressDialog BuildProgress(
-        "Building Video...", statusMessage(0, Config.nLoops, 0, totalFrames),
-        totalFrames * Config.nLoops, parent);
+    progressBar.InitDialog(statusMessage(0, Config.nLoops, 0, totalFrames),
+                           totalFrames * Config.nLoops);
+
+    // wxProgressDialog BuildProgress(
+    //     "Building Video...", statusMessage(0, Config.nLoops, 0, totalFrames),
+    //     totalFrames * Config.nLoops, parent);
 
     std::cout << "Building Video with these properties\n"
               << "Resolution: " << cols << "x" << rows << "\n"
@@ -96,9 +99,13 @@ bool RTX2090Ti::buildVideo() {
 
             RayTracing(OutVideo, LocalStart, LocalEnd, point);
 
-            BuildProgress.Update(
-                framesDone + f,
-                statusMessage(loopDone, Config.nLoops, f, totalFrames));
+            // BuildProgress.Update(
+            //     framesDone + f,
+            //     statusMessage(loopDone, Config.nLoops, f, totalFrames));
+
+            progressBar.UpdateDialog(
+                statusMessage(loopDone, Config.nLoops, f, totalFrames),
+                framesDone + f);
         }
 
         loopDone++;
@@ -115,17 +122,18 @@ bool RTX2090Ti::buildVideo() {
     std::chrono::duration<double> time_took = end - start;
     std::cout << "Building Video took " << time_took.count() << " secs.\n";
 
-    wxMessageDialog doneMessage(
-        parent,
-        "Build Success! Took " + std::to_string(time_took.count()) +
-            " seconds.\nYour Video is Ready, would you like to open the video?"
-            "\nIMPORTANT: FFmpeg must be included in your path, otherwise "
-            "video will not appear",
-        "Build Success", wxOK | wxCANCEL);
+    // wxMessageDialog doneMessage(
+    //     parent,
+    //     "Build Success! Took " + std::to_string(time_took.count()) +
+    //         " seconds.\nYour Video is Ready, would you like to open the
+    //         video?"
+    //         "\nIMPORTANT: FFmpeg must be included in your path, otherwise "
+    //         "video will not appear",
+    //     "Build Success", wxOK | wxCANCEL);
 
-    if (doneMessage.ShowModal() == wxID_OK) {
-        wxLaunchDefaultApplication(Config.OutVideoPath + ".mp4");
-    }
+    // if (doneMessage.ShowModal() == wxID_OK) {
+    //     wxLaunchDefaultApplication(Config.OutVideoPath + ".mp4");
+    // }
 
     return true;
 }

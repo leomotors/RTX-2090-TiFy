@@ -9,8 +9,7 @@ cv::Mat Corgi::changeTone(cv::Mat &NormalizedImage,
                           double ImgBrightness) {
     cv::Mat FinalImage;
 
-    if (ImgBrightness != -1)
-        fConvert(Colors, ImgBrightness);
+    if (ImgBrightness != -1) fConvert(Colors, ImgBrightness);
 
     auto BlueChannel = NormalizedImage * ((double)std::get<0>(Colors) / 255);
     auto GreenChannel = NormalizedImage * ((double)std::get<1>(Colors) / 255);
@@ -43,8 +42,7 @@ cv::Mat Corgi::changeTone_HSV(cv::Mat NormalizedImage,
 }
 
 void Corgi::fConvert(std::tuple<int, int, int> &Colors, double p) {
-    if (p >= 0.95)
-        return;
+    if (p >= 0.95) return;
 
     double h = 1 / (1 - (p / 2 + 0.5));
 

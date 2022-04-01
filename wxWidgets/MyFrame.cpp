@@ -1,20 +1,23 @@
 #include "MyFrame.hpp"
 
-#include <cstdlib>
-#include <exception>
-#include <opencv2/opencv.hpp>
 #include <wx/listctrl.h>
 #include <wx/wx.h>
 
+#include <cstdlib>
+#include <exception>
+#include <opencv2/opencv.hpp>
+
 #include "AboutApp.hpp"
 #include "AppConfig.hpp"
+#include "ConfigAdapter.hpp"
 #include "Events.hpp"
 #include "ImageHandler.hpp"
+#include "ProgressBar.hpp"
 #include "RTX2090Ti.hpp"
 
 MyFrame::MyFrame(const wxString &title, const wxPoint &pos, const wxSize &size)
     : wxFrame(nullptr, wxID_ANY, title, pos, size),
-      ConfigList(Configurations(this, Image)) {
+      ConfigList(ConfigAdapter(this, Image)) {
     // * Menu bar
     wxMenu *menuAbout = new wxMenu;
     menuAbout->Append(GITHUB_MENU, "Visit GitHub Page");
@@ -129,9 +132,10 @@ void MyFrame::OnSaveFile(wxCommandEvent &event) {
 }
 
 void MyFrame::OnAdvanced(wxCommandEvent &event) {
-    const char *tmpMsg{"These are the warp positions that will style your "
-                       "video. If one is set "
-                       "empty, it will be randomly generated again."};
+    const char *tmpMsg{
+        "These are the warp positions that will style your "
+        "video. If one is set "
+        "empty, it will be randomly generated again."};
     wxTextEntryDialog WarpSetDialog(this, tmpMsg, "Warp Points Settings",
                                     ConfigList.getPositionsAsString(),
                                     wxTextEntryDialogStyle, wxDefaultPosition);
@@ -149,9 +153,11 @@ void MyFrame::OnAdvanced(wxCommandEvent &event) {
 
 void MyFrame::OnGenerate(wxCommandEvent &event) {
     std::string traceback = ConfigList.isRTXReady();
+    ProgressBar progBar;
+
     if (traceback.empty()) {
         try {
-            RTX2090Ti RTX(this, Image.getImage(), ConfigList);
+            RTX2090Ti RTX(progBar, Image.getImage(), ConfigList);
             RTX.buildVideo();
         } catch (const std::exception &ex) {
             wxMessageBox(ex.what(), "std::exception thrown!",

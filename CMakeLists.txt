@@ -7,6 +7,7 @@ set(BUILD_DATE "13 January 2022")
 configure_file(config/AppProps.h.in ${CMAKE_CURRENT_BINARY_DIR}/gen/AppProps.h)
 
 set(EXECUTABLE_NAME "RTX2090TiFy")
+set(RTXLIB_NAME "RTX_LIB")
 
 # Find Required Package
 find_package(wxWidgets REQUIRED)
@@ -16,7 +17,8 @@ find_package(OpenCV REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
 
 # Source Files
-file(GLOB APP_SRCFILE "src/*.cpp")
+file(GLOB UI_SRCFILE "wxWidgets/*.cpp")
+file(GLOB CORE_SRCFILE "RTX-2090/*.cpp")
 
 # Compiling
 if(WIN32)
@@ -25,18 +27,24 @@ if(WIN32)
     )
 else()
     add_executable(${EXECUTABLE_NAME} 
-        ${APP_SRCFILE}
+        ${UI_SRCFILE}
     )
 endif()
 
 include_directories(config)
+include_directories(RTX-2090)
+include_directories(wxWidgets)
+
+add_library(${RTXLIB_NAME} ${CORE_SRCFILE})
 
 # Link Libraries
 target_link_libraries(${EXECUTABLE_NAME} ${wxWidgets_LIBRARIES})
 target_link_libraries(${EXECUTABLE_NAME} ${OpenCV_LIBS})
+target_link_libraries(${EXECUTABLE_NAME} ${RTXLIB_NAME})
 target_include_directories(${EXECUTABLE_NAME} PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/gen)
 
 # C++20
+set_property(TARGET ${RTXLIB_NAME} PROPERTY CXX_STANDARD 20)
 set_property(TARGET ${EXECUTABLE_NAME} PROPERTY CXX_STANDARD 20)
 
 # Add Warning Flags
@@ -61,10 +69,10 @@ if(WIN32)
             COMMENT "Packing app with packapp.bat"
         )
     endif()
-else()
-    # For Linux
-    add_custom_command(TARGET ${EXECUTABLE_NAME} POST_BUILD
-        COMMAND mv ${EXECUTABLE_NAME} ..
-        COMMENT "Moving Executable to Project Root..."
-)
 endif()
+
+# Install
+install(
+    TARGETS ${EXECUTABLE_NAME}
+    RUNTIME DESTINATION /usr/local/bin
+)

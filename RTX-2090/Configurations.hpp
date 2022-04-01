@@ -4,8 +4,6 @@
 #include <string>
 #include <utility>
 #include <vector>
-#include <wx/listctrl.h>
-#include <wx/wx.h>
 
 #include "ImageHandler.hpp"
 
@@ -19,7 +17,7 @@ enum Algorithms {
 class Configurations {
     friend class RTX2090Ti;
 
-  private:
+  protected:
     std::vector<std::string> ItemsName;
     std::vector<std::string> ItemsGuide;
     std::map<int, std::string> Algorithms;
@@ -32,19 +30,10 @@ class Configurations {
     std::vector<std::pair<int, int>> WarpPosition;
     std::string OutVideoPath;
 
-    wxWindow *parent;
-    wxListView *InputListView;
-    wxListView *OutputListView;
-
     ImageHandler &ImageHandlerRef;
 
-    int SelectedInputRow{-1};
-    int SelectedOutputRow{-1};
-
   public:
-    Configurations(wxWindow *parent, ImageHandler &ImageHandlerRef);
-    wxListView *getInputListView();
-    wxListView *getOutputListView();
+    Configurations(ImageHandler &ImageHandlerRef);
 
     // * Update List with Current Data
     void updateInputList();
@@ -52,16 +41,15 @@ class Configurations {
     void setOutputPath(std::string &outputPath);
 
     std::string getPositionsAsString();
-    // * Validate and If Pass, Set it. Return empty string if pass, else traceback
+    // * Validate and If Pass, Set it. Return empty string if pass, else
+    // traceback
     std::string validateWarp(std::string toValidate);
     // * Returns Empty String if is Ready, otherwise return error message
     std::string isRTXReady();
 
-  private:
+  protected:
     void setWarpPosition(std::vector<std::pair<int, int>> newWarp =
                              std::vector<std::pair<int, int>>());
-
-    void OnOutputListActivated(int selected);
 
     std::string validateConfig(int itemID, std::string toValidate);
 };

@@ -3,9 +3,9 @@
 #include <opencv2/opencv.hpp>
 #include <string>
 #include <utility>
-#include <wx/wx.h>
 
 #include "Configurations.hpp"
+#include "IProgressBar.hpp"
 
 #define MYCODEC 'X', 'V', 'I', 'D'
 
@@ -22,10 +22,11 @@ class RTX2090Ti {
     cv::VideoWriter OutVideo;
     int cols, rows;
 
-    wxWindow *parent;
+    IProgressBar &progressBar;
 
   public:
-    RTX2090Ti(wxWindow *parent, cv::Mat BaseImage, Configurations &Config);
+    RTX2090Ti(IProgressBar &progressBar, cv::Mat BaseImage,
+              Configurations &Config);
     // * Build Video, Configuration must be confirmed to be Ready for RTX
     bool buildVideo();
 

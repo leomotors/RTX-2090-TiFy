@@ -1,18 +1,19 @@
 #pragma once
 
-#include <string>
 #include <wx/listctrl.h>
 #include <wx/wx.h>
 
-#include "Configurations.hpp"
+#include <string>
+
+#include "ConfigAdapter.hpp"
 #include "Events.hpp"
 #include "ImageHandler.hpp"
 
 class MyFrame : public wxFrame {
-    friend class Configurations;
+    friend class ConfigAdapter;
 
   private:
-    Configurations ConfigList;
+    ConfigAdapter ConfigList;
     ImageHandler Image;
 
     std::string AboutApp;
